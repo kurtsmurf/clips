@@ -13,11 +13,7 @@ export const AudioInput = ({ onChange }) =>
 const audioBufferOfFile = (file) =>
   new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onloadend = (e) => {
-      const arrayBuffer = e.target.result;
-      audioContext.decodeAudioData(arrayBuffer).then((audioBuffer) => {
-        resolve(audioBuffer);
-      });
-    };
+    reader.onloadend = (e) =>
+      audioContext.decodeAudioData(e.target.result).then(resolve);
     reader.readAsArrayBuffer(file);
   });

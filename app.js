@@ -1,15 +1,18 @@
-import { createSignal, createEffect } from "https://cdn.skypack.dev/solid-js";
+import {
+  createEffect,
+  createSignal,
+  For,
+} from "https://cdn.skypack.dev/solid-js";
 import h from "https://cdn.skypack.dev/solid-js/h";
 import { AudioInput } from "./audioInput";
 
-export const App = () =>
-  h(
-    "div",
-    {},
-    h(AudioInput, { onChange: setBuffers }),
-    () => buffers().map((buffer) => h("div", {}, buffer.length)),
-  );
+export const App = () => [
+  h(AudioInput, { onChange: setBuffers }),
+  () => h(For, { each: buffers() }, Buffer),
+];
+
+const Buffer = (buffer) => h("p", {}, buffer.length);
 
 const [buffers, setBuffers] = createSignal([]);
 
-createEffect(() => console.log(buffers()))
+createEffect(() => console.log(buffers()));
