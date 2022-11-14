@@ -4,15 +4,15 @@ import {
   For,
 } from "https://cdn.skypack.dev/solid-js";
 import h from "https://cdn.skypack.dev/solid-js/h";
-import { AudioInput } from "./audioInput";
+import { AudioInput } from "./AudioInput";
+import { Tile } from "./Tile";
 
 export const App = () => [
   h(AudioInput, { onChange: setBuffers }),
-  () => h(For, { each: buffers() }, Buffer),
+  () => h(For, { each: buffers() }, Tile),
 ];
-
-const Buffer = (buffer) => h("p", {}, buffer.length);
 
 const [buffers, setBuffers] = createSignal([]);
 
 createEffect(() => console.log(buffers()));
+

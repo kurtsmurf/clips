@@ -1,13 +1,13 @@
 import h from "https://cdn.skypack.dev/solid-js/h";
 import { audioContext } from "./audioContext";
 
-export const AudioInput = ({ onChange }) =>
+export const AudioInput = (props) =>
   h("input", {
     type: "file",
     accept: ".mp3, .wav, .m4a",
     multiple: true,
     onChange: (e) =>
-      Promise.all([...e.target.files].map(audioBufferOfFile)).then(onChange),
+      Promise.all([...e.target.files].map(audioBufferOfFile)).then(props.onChange),
   });
 
 const audioBufferOfFile = (file) =>

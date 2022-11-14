@@ -1,4 +1,4 @@
 import { render } from "https://cdn.skypack.dev/solid-js/web";
-import { App } from "./app.js";
+import { App } from "./App.js";
 
 render(App, document.body);
