@@ -3,8 +3,6 @@ import { AudioInput } from "./AudioInput";
 import { Tile } from "./Tile";
 
 export const App = () => {
-  createEffect(() => console.log(buffers()));
-
   return (
     <>
       <AudioInput onChange={setBuffers} />
@@ -16,3 +14,5 @@ export const App = () => {
 };
 
 const [buffers, setBuffers] = createSignal<AudioBuffer[]>([]);
+
+createEffect(() => console.log(buffers()));

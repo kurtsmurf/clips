@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+}
 figure {
     border: 1rem dashed purple;
+}
+svg {
+    background-color: orange;
+    width: 100%;
 }
