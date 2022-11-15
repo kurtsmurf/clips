@@ -1,5 +1,5 @@
-export const Tile = (buffer) => (
+export const Tile = (props: { buffer: AudioBuffer }) => (
   <figure>
-    <p>{buffer.length}</p>
+    <p>{props.buffer.duration.toFixed(2)}s</p>
   </figure>
 );

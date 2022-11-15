@@ -2,13 +2,17 @@ import { createEffect, createSignal, For } from "solid-js";
 import { AudioInput } from "./AudioInput";
 import { Tile } from "./Tile";
 
-export const App = () => (
-  <>
-    <AudioInput onChange={setBuffers} />
-    <For each={buffers()}>{Tile}</For>
-  </>
-);
+export const App = () => {
+  createEffect(() => console.log(buffers()));
 
-const [buffers, setBuffers] = createSignal([]);
+  return (
+    <>
+      <AudioInput onChange={setBuffers} />
+      <For each={buffers()}>
+        {(buffer) => <Tile buffer={buffer} />}
+      </For>
+    </>
+  );
+};
 
-createEffect(() => console.log(buffers()));
+const [buffers, setBuffers] = createSignal<AudioBuffer[]>([]);
