@@ -2,9 +2,17 @@
     margin: 0;
 }
 figure {
-    border: 1rem dashed purple;
+    border: 1rem dashed salmon;
+    display: grid;
+}
+figcaption {
+    grid-area: 1 / 1;
+    font-size: 2rem;
+    font-weight: bolder;
+    font-family: monospace;
 }
 svg {
+    grid-area: 1 / 1;
     background-color: orange;
     width: 100%;
 }
