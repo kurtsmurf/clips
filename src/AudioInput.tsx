@@ -1,6 +1,8 @@
 import { audioContext } from "./audioContext";
+import { Clip } from "./Clip";
 
-type Props = { onChange: (buffers: AudioBuffer[]) => void; };
+type Props = { onChange: (clips: Clip[]) => void };
+
 export const AudioInput = (props: Props) => (
   <input
     type="file"
@@ -9,11 +11,16 @@ export const AudioInput = (props: Props) => (
     onChange={(e) => {
       const files = [...(e.currentTarget.files || [])];
       Promise
-        .all(files.map(audioBufferOfFile))
+        .all(files.map(clipOfFile))
         .then(props.onChange);
     }}
   />
 );
+
+const clipOfFile = async (file: File): Promise<Clip> => ({
+  name: file.name,
+  buffer: await audioBufferOfFile(file),
+});
 
 const audioBufferOfFile = (file: File) =>
   new Promise<AudioBuffer>((resolve, reject) => {

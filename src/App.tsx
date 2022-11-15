@@ -1,18 +1,19 @@
 import { createEffect, createSignal, For } from "solid-js";
 import { AudioInput } from "./AudioInput";
+import { Clip } from "./Clip";
 import { Tile } from "./Tile";
 
 export const App = () => {
   return (
     <>
-      <AudioInput onChange={setBuffers} />
-      <For each={buffers()}>
-        {(buffer) => <Tile buffer={buffer} />}
+      <AudioInput onChange={setClips} />
+      <For each={clips()}>
+        {(clip) => <Tile buffer={clip.buffer} name={clip.name} />}
       </For>
     </>
   );
 };
 
-const [buffers, setBuffers] = createSignal<AudioBuffer[]>([]);
+const [clips, setClips] = createSignal<Clip[]>([]);
 
-createEffect(() => console.log(buffers()));
+createEffect(() => console.log(clips()));
