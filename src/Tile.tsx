@@ -1,5 +1,5 @@
 export const Tile = (buffer) => (
-  <figure style={"background-color: orange;"}>
+  <figure>
     <p>{buffer.length}</p>
   </figure>
 );
