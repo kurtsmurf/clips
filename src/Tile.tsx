@@ -1,4 +1,4 @@
-import { audioContext } from "./audioContext";
+import { audioContext, out } from "./audioContext";
 import { Clip } from "./Clip";
 
 type Props = { clip: Clip };
@@ -10,7 +10,7 @@ export const Tile = (props: Props) => {
     if (node) return;
     node = audioContext.createBufferSource();
     node.buffer = props.clip.buffer;
-    node.connect(audioContext.destination);
+    node.connect(out);
     node.start();
   };
 
