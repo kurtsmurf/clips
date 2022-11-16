@@ -10,6 +10,8 @@ figcaption {
     font-size: 2rem;
     font-weight: bolder;
     font-family: monospace;
+    display: flex;
+    justify-content: space-between;
 }
 svg {
     grid-area: 1 / 1;

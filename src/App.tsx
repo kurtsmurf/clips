@@ -8,7 +8,7 @@ export const App = () => {
     <>
       <AudioInput onChange={setClips} />
       <For each={clips()}>
-        {(clip) => <Tile buffer={clip.buffer} name={clip.name} />}
+        {(clip) => <Tile clip={clip} />}
       </For>
     </>
   );
