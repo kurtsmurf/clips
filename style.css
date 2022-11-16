@@ -4,8 +4,10 @@
 figure {
     border: 1rem dashed salmon;
     display: grid;
+    grid-template-columns: 2;
 }
 figcaption {
+    user-select: none;
     grid-area: 1 / 1;
     font-size: 2rem;
     font-weight: bolder;
@@ -14,7 +16,6 @@ figcaption {
     justify-content: space-between;
 }
 svg {
-    grid-area: 1 / 1;
     background-color: orange;
     width: 100%;
 }
