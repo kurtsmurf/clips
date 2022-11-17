@@ -15,12 +15,12 @@ export const Tile = (props: Props) => {
   };
 
   const stop = () => {
-    node?.stop();
+    try { node?.stop(); } catch {}
     node = undefined;
   };
 
   return (
-    <figure onMouseDown={play} onMouseUp={stop} onMouseLeave={stop}>
+    <figure onMouseDown={play} onMouseUp={stop} onMouseLeave={stop} onTouchStart={play} onTouchEnd={stop} onTouchCancel={stop}>
       <svg viewBox="0 0 2 2">
         <path d="m 0 1 h 2" stroke="black" stroke-width=".1" />
       </svg>
