@@ -2,20 +2,49 @@ import { audioContext, out } from "./audioContext";
 import { Clip } from "./Clip";
 import { createSignal } from "solid-js";
 
+
 type Props = { clip: Clip };
+
+const defaultPath = "m 0 1 h 2";
 
 export const Tile = (props: Props) => {
   const [node, setNode] = createSignal<AudioBufferSourceNode | undefined>(
     undefined,
   );
+  const [d, setD] = createSignal(defaultPath)
+
+  let animationFrame: number;
+
+  let x = 0;
+
+  const stopAnimation = () => {
+    cancelAnimationFrame(animationFrame)
+    setD(defaultPath)
+    x = 0;
+  }
+
+  const startAnimation = () => {
+    const tick = () => {
+      console.log("tick")
+      x += .01;
+
+      setD(`m ${x} 1 h 2`)
+
+      animationFrame = requestAnimationFrame(tick)
+    }
+    tick()
+  }
 
   const play = () => {
     if (node()) return;
+
     const newNode = audioContext.createBufferSource();
     newNode.buffer = props.clip.buffer;
     newNode.connect(out);
     newNode.start();
     setNode(newNode);
+
+    startAnimation()
   };
 
   const stop = () => {
@@ -23,6 +52,8 @@ export const Tile = (props: Props) => {
       node()?.stop();
     } catch {}
     setNode(undefined);
+
+    stopAnimation();
   };
 
   return (
@@ -36,7 +67,7 @@ export const Tile = (props: Props) => {
       onTouchCancel={stop}
     >
       <svg viewBox="0 0 2 2">
-        <path d="m 0 1 h 2" stroke="black" stroke-width=".1" />
+        <path d={d()} stroke="black" stroke-width=".1" />
       </svg>
       <figcaption>
         <p>{props.clip.name}</p>
