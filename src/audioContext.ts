@@ -1,8 +1,8 @@
-import { unmute } from "./unmute"
+import { unmute } from "./unmute";
 
 export const audioContext = new AudioContext();
 
-unmute(audioContext)
+unmute(audioContext);
 
 export const out = audioContext.createDynamicsCompressor();
 

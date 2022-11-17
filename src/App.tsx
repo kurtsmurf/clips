@@ -7,9 +7,11 @@ export const App = () => {
   return (
     <>
       <AudioInput onChange={setClips} />
-      <For each={clips()}>
-        {(clip) => <Tile clip={clip} />}
-      </For>
+      <div class="clips">
+        <For each={clips()}>
+          {(clip) => <Tile clip={clip} />}
+        </For>
+      </div>
     </>
   );
 };

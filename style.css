@@ -1,22 +1,31 @@
 * {
     margin: 0;
 }
-figure {
-    border: 1rem dashed salmon;
+#root {
     display: grid;
-    grid-template-columns: 2;
+    gap: 1rem;
+    padding: 1rem;
 }
-figcaption {
-    user-select: none;
-    -webkit-user-select: none;
-    grid-area: 1 / 1;
-    font-size: 2rem;
-    font-weight: bolder;
-    font-family: monospace;
+.clips {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+figure {
+    border: 1rem dashed purple;
+    background-color: orange;
+    width: 10rem;
+    display: grid;
+}
+.active {
+  border: 1rem dashed seagreen;  
 }
 svg {
-    background-color: orange;
-    width: 100%;
+    grid-area: 1 / 1;
+}
+figcaption {
+    grid-area: 1 / 1;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: hidden;
 }
