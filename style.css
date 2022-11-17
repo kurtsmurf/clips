@@ -8,6 +8,7 @@ figure {
 }
 figcaption {
     user-select: none;
+    -webkit-user-select: none;
     grid-area: 1 / 1;
     font-size: 2rem;
     font-weight: bolder;
