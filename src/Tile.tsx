@@ -16,31 +16,23 @@ export const Tile = (props: Props) => {
 
   let animationFrame: number;
 
+  const analyser = audioContext.createAnalyser();
+  const samples = new Float32Array(FFT_SIZE);
+
+  const refreshSamples = () => {
+    analyser.getFloatTimeDomainData(samples);
+  };
+
   const stopAnimation = () => {
     cancelAnimationFrame(animationFrame);
     setD(defaultPath);
   };
 
   const startAnimation = () => {
-    const analyser = audioContext.createAnalyser();
-    const samples = new Float32Array(FFT_SIZE);
-
     node()?.connect(analyser);
-
-    const refreshSamples = () => {
-      analyser.getFloatTimeDomainData(samples);
-    };
-
     const tick = () => {
       refreshSamples();
-      console.log(samples);
-
-      const blah = toPath(samples);
-
-      console.log(blah);
-
-      setD(blah);
-
+      setD(toPath(samples));
       animationFrame = requestAnimationFrame(tick);
     };
     tick();
@@ -85,18 +77,12 @@ export const Tile = (props: Props) => {
   );
 };
 
-const move = (
-  path: string,
-  { x, y }: { x: number; y: number },
-) => path + `M ${x}, ${y} `;
-const lineTo = (
-  path: string,
-  { x, y }: { x: number; y: number },
-) => path + `L ${x}, ${y} `;
+type Point = { x: number; y: number };
 
+const move = (path: string, { x, y }: Point) => `${path} M ${x}, ${y} `;
+const lineTo = (path: string, { x, y }: Point) => `${path} L ${x}, ${y} `;
 const toPath = (floats: Float32Array): string => {
   const [first, ...rest] = floats;
-
   return rest.reduce(
     (path, float, index) =>
       lineTo(
