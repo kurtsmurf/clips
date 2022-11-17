@@ -6,7 +6,7 @@ type Props = { clip: Clip };
 
 const defaultPath = "m 0 0 h 2";
 
-const FFT_SIZE = 16;
+const FFT_SIZE = 64;
 
 export const Tile = (props: Props) => {
   const [node, setNode] = createSignal<AudioBufferSourceNode | undefined>(
@@ -32,13 +32,12 @@ export const Tile = (props: Props) => {
     };
 
     const tick = () => {
-
       refreshSamples();
-      console.log(samples)
+      console.log(samples);
 
-      const blah = toPath(samples)
+      const blah = toPath(samples);
 
-      console.log(blah)
+      console.log(blah);
 
       setD(blah);
 
@@ -76,7 +75,7 @@ export const Tile = (props: Props) => {
       onTouchCancel={stop}
     >
       <svg viewBox="0 -1 2 2">
-        <path d={d()} stroke="black" stroke-width=".03" fill="none"/>
+        <path d={d()} stroke="black" stroke-width=".03" fill="none" />
       </svg>
       <figcaption>
         <p>{props.clip.name}</p>
@@ -88,24 +87,25 @@ export const Tile = (props: Props) => {
 
 const move = (
   path: string,
-  { time, amplitude }: { time: number; amplitude: number },
-) => path + `M ${time}, ${amplitude} `;
+  { x, y }: { x: number; y: number },
+) => path + `M ${x}, ${y} `;
 const lineTo = (
   path: string,
-  { time, amplitude }: { time: number; amplitude: number },
-) => path + `L ${time}, ${amplitude} `;
-const normalize = (float: Float32Array[number]) => float;
+  { x, y }: { x: number; y: number },
+) => path + `L ${x}, ${y} `;
+
 const toPath = (floats: Float32Array): string => {
-  const [first, ...rest] = floats.map(normalize);
-  const startingPoint = move("", { time: 0, amplitude: first });
+  const [first, ...rest] = floats;
+
   return rest.reduce(
-    (path, float, index) => lineTo(
-      path,
-      {
-        time: (index + 1) / FFT_SIZE,
-        amplitude: float
-      }
-    ),
-    startingPoint,
+    (path, float, index) =>
+      lineTo(
+        path,
+        {
+          x: (index + 1) * (2 / (FFT_SIZE - 1)),
+          y: float,
+        },
+      ),
+    move("", { x: 0, y: first }),
   );
 };
