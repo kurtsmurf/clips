@@ -1,42 +1,21 @@
 import { audioContext, out } from "./audioContext";
 import { Clip } from "./Clip";
 import { createSignal } from "solid-js";
+import { pathOfFloat32Array } from "./path";
+import { FFT_SIZE } from "./FFT_SIZE";
 
+const DEFAULT_PATH = "m 0 0 h 2";
 type Props = { clip: Clip };
 
-const defaultPath = "m 0 0 h 2";
-
-const FFT_SIZE = 64;
-
 export const Tile = (props: Props) => {
+  const analyser = audioContext.createAnalyser();
+  const samples = new Float32Array(FFT_SIZE);
+  let animationFrame: number;
+
   const [node, setNode] = createSignal<AudioBufferSourceNode | undefined>(
     undefined,
   );
-  const [d, setD] = createSignal(defaultPath);
-
-  let animationFrame: number;
-
-  const analyser = audioContext.createAnalyser();
-  const samples = new Float32Array(FFT_SIZE);
-
-  const refreshSamples = () => {
-    analyser.getFloatTimeDomainData(samples);
-  };
-
-  const stopAnimation = () => {
-    cancelAnimationFrame(animationFrame);
-    setD(defaultPath);
-  };
-
-  const startAnimation = () => {
-    node()?.connect(analyser);
-    const tick = () => {
-      refreshSamples();
-      setD(toPath(samples));
-      animationFrame = requestAnimationFrame(tick);
-    };
-    tick();
-  };
+  const [d, setD] = createSignal(DEFAULT_PATH);
 
   const play = () => {
     if (node()) return;
@@ -44,8 +23,14 @@ export const Tile = (props: Props) => {
     newNode.buffer = props.clip.buffer;
     newNode.connect(out);
     newNode.start();
+    newNode.connect(analyser);
     setNode(newNode);
-    startAnimation();
+    const tick = () => {
+      analyser.getFloatTimeDomainData(samples);
+      setD(pathOfFloat32Array(samples));
+      animationFrame = requestAnimationFrame(tick);
+    };
+    tick();
   };
 
   const stop = () => {
@@ -53,7 +38,8 @@ export const Tile = (props: Props) => {
       node()?.stop();
     } catch {}
     setNode(undefined);
-    stopAnimation();
+    cancelAnimationFrame(animationFrame);
+    setD(DEFAULT_PATH);
   };
 
   return (
@@ -74,24 +60,5 @@ export const Tile = (props: Props) => {
         <p>{props.clip.buffer.duration.toFixed(2)}s</p>
       </figcaption>
     </figure>
-  );
-};
-
-type Point = { x: number; y: number };
-
-const move = (path: string, { x, y }: Point) => `${path} M ${x}, ${y} `;
-const lineTo = (path: string, { x, y }: Point) => `${path} L ${x}, ${y} `;
-const toPath = (floats: Float32Array): string => {
-  const [first, ...rest] = floats;
-  return rest.reduce(
-    (path, float, index) =>
-      lineTo(
-        path,
-        {
-          x: (index + 1) * (2 / (FFT_SIZE - 1)),
-          y: float,
-        },
-      ),
-    move("", { x: 0, y: first }),
   );
 };
