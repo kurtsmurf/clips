@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For } from "solid-js";
+import { createSignal, For } from "solid-js";
 import { AudioInput } from "./AudioInput";
 import { Clip } from "./Clip";
 import { Tile } from "./Tile";
@@ -6,7 +6,7 @@ import { Tile } from "./Tile";
 export const App = () => {
   return (
     <>
-      <AudioInput onChange={setClips} />
+      <AudioInput onChange={onChange} />
       <div class="clips">
         <For each={clips()}>
           {(clip) => <Tile clip={clip} />}
@@ -18,4 +18,12 @@ export const App = () => {
 
 const [clips, setClips] = createSignal<Clip[]>([]);
 
-createEffect(() => console.log(clips()));
+const onChange = (newClips: Clip[]) => setClips(deduplicate(clips(), newClips));
+
+const deduplicate = (oldClips: Clip[], newClips: Clip[]) => {
+  const isNew = (clip: Clip) =>
+    !oldClips.find((oldClip) =>
+      oldClip.name === clip.name && oldClip.buffer.length === clip.buffer.length
+    );
+  return [...oldClips, ...newClips.filter(isNew)];
+};
