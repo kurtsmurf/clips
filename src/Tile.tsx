@@ -16,6 +16,7 @@ export const Tile = (props: Props) => {
     undefined,
   );
   const [d, setD] = createSignal(DEFAULT_PATH);
+  const [rms, setRms] = createSignal(0);
 
   const play = () => {
     if (node()) return;
@@ -28,6 +29,9 @@ export const Tile = (props: Props) => {
     const tick = () => {
       analyser.getFloatTimeDomainData(samples);
       setD(pathOfFloat32Array(samples));
+      setRms(
+        samples.reduce((acc, cur) => acc + Math.abs(cur), 0) / samples.length,
+      );
       animationFrame = requestAnimationFrame(tick);
     };
     tick();
@@ -44,6 +48,7 @@ export const Tile = (props: Props) => {
 
   return (
     <figure
+      style={`--rms: ${rms()}`}
       class={node() ? "active" : undefined}
       onMouseDown={play}
       onMouseUp={stop}

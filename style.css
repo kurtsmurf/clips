@@ -12,13 +12,14 @@
     gap: 1rem;
 }
 figure {
-    border: 1rem dashed purple;
+    border: 1rem solid;
+    border-color: rgba(0, 0, 0, 0);
     background-color: orange;
     width: 10rem;
     display: grid;
 }
 .active {
-  border: 1rem dashed seagreen;  
+    border-color: rgba(0, 0, 0, var(--rms));
 }
 svg {
     grid-area: 1 / 1;
