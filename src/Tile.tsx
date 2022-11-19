@@ -73,7 +73,7 @@ export const Tile = (props: Props) => {
       <figcaption>
         <p>{props.clip.name}</p>
         <p>{props.clip.buffer.duration.toFixed(2)}s</p>
-        <p>{props.clip.buffer.numberOfChannels} channels</p>
+        <p>{props.clip.buffer.numberOfChannels} channel</p>
       </figcaption>
     </figure>
   );
