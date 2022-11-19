@@ -1,6 +1,6 @@
 import { audioContext, out } from "./audioContext";
 import { Clip } from "./Clip";
-import { createSignal, onCleanup } from "solid-js";
+import { createSignal } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
@@ -18,13 +18,6 @@ export const Tile = (props: Props) => {
   );
   const [d, setD] = createSignal(FLAT_LINE);
   const [rms, setRms] = createSignal(0);
-
-  onCleanup(() => {
-    cancelAnimationFrame(animationFrame);
-    try {
-      node()?.stop();
-    } catch {}
-  });
 
   const createNode = () => {
     const node = audioContext.createBufferSource();
@@ -55,12 +48,11 @@ export const Tile = (props: Props) => {
     setNode(undefined);
     cancelAnimationFrame(animationFrame);
     setD(FLAT_LINE);
+    setRms(0);
   };
 
   return (
     <figure
-      style={`--rms: ${rms()}`}
-      class={node() ? "active" : undefined}
       onMouseDown={play}
       onMouseUp={stop}
       onMouseLeave={stop}
@@ -70,10 +62,17 @@ export const Tile = (props: Props) => {
     >
       <svg viewBox="0 -1 2 2">
         <path d={d()} stroke="black" stroke-width=".03" fill="none" />
+        <path
+          d={`M 1.985 1 v ${-rms() * 3}`}
+          stroke="black"
+          stroke-width=".03"
+          fill="none"
+        />
       </svg>
       <figcaption>
         <p>{props.clip.name}</p>
         <p>{props.clip.buffer.duration.toFixed(2)}s</p>
+        <p>{props.clip.buffer.numberOfChannels} channels</p>
       </figcaption>
     </figure>
   );
