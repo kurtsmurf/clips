@@ -53,6 +53,7 @@ export const Tile = (props: Props) => {
 
   return (
     <figure
+      style={`--rms: ${rms()}`}
       onMouseDown={play}
       onMouseUp={stop}
       onMouseLeave={stop}
@@ -62,12 +63,12 @@ export const Tile = (props: Props) => {
     >
       <svg viewBox="0 -1 2 2">
         <path d={d()} stroke="black" stroke-width=".03" fill="none" />
-        <path
+        {/* <path
           d={`M 1.985 1 v ${-rms() * 3}`}
           stroke="black"
           stroke-width=".03"
           fill="none"
-        />
+        /> */}
       </svg>
       <figcaption>
         <p>{props.clip.name}</p>

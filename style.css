@@ -1,6 +1,7 @@
 * {
     margin: 0;
 }
+body { filter: invert(); background-color: black; } /** :o */
 #root {
     display: grid;
     gap: 1rem;
@@ -12,8 +13,10 @@
     gap: 1rem;
 }
 figure {
+    --rms: 0;
     width: 10rem;
     display: grid;
+    background: linear-gradient(0deg, #eee, white calc(var(--rms) * 2 * 100%));
 }
 svg {
     grid-area: 1 / 1;
