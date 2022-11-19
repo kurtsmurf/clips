@@ -1,10 +1,11 @@
 import { audioContext, out } from "./audioContext";
 import { Clip } from "./Clip";
-import { createSignal } from "solid-js";
+import { createSignal, onCleanup } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
-const DEFAULT_PATH = "m 0 0 h 2";
+const FLAT_LINE = "m 0 0 h 2";
+
 type Props = { clip: Clip };
 
 export const Tile = (props: Props) => {
@@ -15,26 +16,36 @@ export const Tile = (props: Props) => {
   const [node, setNode] = createSignal<AudioBufferSourceNode | undefined>(
     undefined,
   );
-  const [d, setD] = createSignal(DEFAULT_PATH);
+  const [d, setD] = createSignal(FLAT_LINE);
   const [rms, setRms] = createSignal(0);
+
+  onCleanup(() => {
+    cancelAnimationFrame(animationFrame);
+    try {
+      node()?.stop();
+    } catch {}
+  });
+
+  const createNode = () => {
+    const node = audioContext.createBufferSource();
+    node.buffer = props.clip.buffer;
+    node.connect(out);
+    node.start();
+    node.connect(analyser);
+    return node;
+  };
+
+  const tick = () => {
+    analyser.getFloatTimeDomainData(samples);
+    setD(pathOfFloat32Array(samples));
+    setRms(rmsOfSamples(samples));
+    animationFrame = requestAnimationFrame(tick);
+  };
 
   const play = () => {
     if (node()) return;
-    const newNode = audioContext.createBufferSource();
-    newNode.buffer = props.clip.buffer;
-    newNode.connect(out);
-    newNode.start();
-    newNode.connect(analyser);
-    setNode(newNode);
-    const tick = () => {
-      analyser.getFloatTimeDomainData(samples);
-      setD(pathOfFloat32Array(samples));
-      setRms(
-        samples.reduce((acc, cur) => acc + Math.abs(cur), 0) / samples.length,
-      );
-      animationFrame = requestAnimationFrame(tick);
-    };
-    tick();
+    setNode(createNode());
+    animationFrame = requestAnimationFrame(tick);
   };
 
   const stop = () => {
@@ -43,7 +54,7 @@ export const Tile = (props: Props) => {
     } catch {}
     setNode(undefined);
     cancelAnimationFrame(animationFrame);
-    setD(DEFAULT_PATH);
+    setD(FLAT_LINE);
   };
 
   return (
@@ -67,3 +78,6 @@ export const Tile = (props: Props) => {
     </figure>
   );
 };
+
+const rmsOfSamples = (samples: Float32Array) =>
+  samples.reduce((acc, cur) => acc + Math.abs(cur), 0) / samples.length;
