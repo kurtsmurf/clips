@@ -1,6 +1,4 @@
-* {
-    margin: 0;
-}
+* { margin: 0; }
 body { filter: invert(); background-color: black; } /** :o */
 #root {
     display: grid;
@@ -24,12 +22,18 @@ svg {
     grid-area: 1 / 1;
 }
 figcaption {
-    padding: 1rem;
+    padding: 0.5rem;
     grid-area: 1 / 1;
     user-select: none;
     -webkit-user-select: none;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.125rem;
+}
+
+figcaption p {
+    padding: 0.25rem;
+    margin-right: auto;
+    background-color: #fffa;
 }
