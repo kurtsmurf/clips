@@ -1,4 +1,5 @@
 * { margin: 0; }
+html { font-family: system-ui, sans-serif; }
 body { filter: invert(); background-color: black; } /** :o */
 #root {
     display: grid;
