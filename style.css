@@ -4,19 +4,18 @@
 body { filter: invert(); background-color: black; } /** :o */
 #root {
     display: grid;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 2vw;
+    padding: 2vw;
 }
 .clips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+    display: grid;
+    gap: 2vw;
+    grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
 }
 figure {
     --rms: 0;
-    width: 10rem;
     display: grid;
-    background: linear-gradient(0deg, #ddd, white calc(var(--rms) * 3 * 100%));
+    background: linear-gradient(0deg, #ddd, white calc(var(--rms) * 5 * 100%));
 }
 svg {
     grid-area: 1 / 1;

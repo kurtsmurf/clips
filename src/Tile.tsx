@@ -4,8 +4,6 @@ import { createSignal } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
-const FLAT_LINE = "m 0 0 h 2";
-
 type Props = { clip: Clip };
 
 export const Tile = (props: Props) => {
@@ -16,7 +14,7 @@ export const Tile = (props: Props) => {
   const [node, setNode] = createSignal<AudioBufferSourceNode | undefined>(
     undefined,
   );
-  const [d, setD] = createSignal(FLAT_LINE);
+  const [d, setD] = createSignal("");
   const [rms, setRms] = createSignal(0);
 
   const createNode = () => {
@@ -47,7 +45,7 @@ export const Tile = (props: Props) => {
     } catch {}
     setNode(undefined);
     cancelAnimationFrame(animationFrame);
-    setD(FLAT_LINE);
+    setD("");
     setRms(0);
   };
 
@@ -63,12 +61,6 @@ export const Tile = (props: Props) => {
     >
       <svg viewBox="0 -1 2 2">
         <path d={d()} stroke="black" stroke-width=".03" fill="none" />
-        {/* <path
-          d={`M 1.985 1 v ${-rms() * 3}`}
-          stroke="black"
-          stroke-width=".03"
-          fill="none"
-        /> */}
       </svg>
       <figcaption>
         <p>{props.clip.name}</p>
