@@ -16,14 +16,20 @@ figure {
     --rms: 0;
     display: grid;
     background: 
-    linear-gradient(180deg, #ddd, white calc(var(--rms) * 5 * 100%));
+    linear-gradient(0deg, #ddd, transparent calc(var(--rms) * 3 * 100%)),
+    linear-gradient(180deg, #ddd, transparent calc(var(--rms) * 3 * 100%))
+    ;
 }
 svg {
     grid-area: 1 / 1;
 }
 figcaption {
+    padding: 1rem;
     grid-area: 1 / 1;
     user-select: none;
     -webkit-user-select: none;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
