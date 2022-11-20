@@ -52,8 +52,9 @@ export const Tile = (props: Props) => {
   return (
     <figure
       style={`--rms: ${rms()}`}
+      class={node() ? "active" : undefined}
       onMouseDown={play}
-      onMouseEnter={e => e.buttons && play()}
+      onMouseEnter={(e) => e.buttons && play()}
       onMouseUp={stop}
       onMouseLeave={stop}
       onTouchStart={play}
