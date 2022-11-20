@@ -14,8 +14,8 @@ figure {
     --rms: 0;
     display: grid;
     background: 
-    linear-gradient(0deg, #ddd, transparent calc(var(--rms) * 3 * 100%)),
-    linear-gradient(180deg, #ddd, transparent calc(var(--rms) * 3 * 100%))
+    linear-gradient(0deg, #ddd, transparent calc(var(--rms) * 2 * 100%)),
+    linear-gradient(180deg, #ddd, transparent calc(var(--rms) * 2 * 100%))
     ;
 }
 svg {
