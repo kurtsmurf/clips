@@ -21,21 +21,26 @@ body { filter: invert(); background-color: black; } /** :o */
 figure {
     --rms: 0;
     display: grid;
+}
+.active svg, .active figcaption {
+    transform: scale(0.95);
+}
+svg {
     background: 
     linear-gradient(0deg, #0004, transparent calc(var(--rms) * 2 * 100%)),
     linear-gradient(180deg, #0004, transparent calc(var(--rms) * 2 * 100%));
     transition-property: transform;
     transition-duration: 75ms;
     transition-timing-function: cubic-bezier();
-}
-.active {
-    transform: scale(0.95);
-}
-svg {
     grid-area: 1 / 1;
+    border: 0.1rem solid black;
+    background-color: white;
 }
 figcaption {
-    border: 0.1rem solid black;
+    transition-property: transform;
+    transition-duration: 75ms;
+    transition-timing-function: cubic-bezier();
+
     padding: 0.5rem;
     grid-area: 1 / 1;
     overflow: hidden;
@@ -47,4 +52,16 @@ figcaption p {
     padding: 0.25rem;
     margin-right: auto;
     background-color: #fffa;
+}
+figure::before {
+    content: "";
+    grid-area: 1 / 1;
+    background-image:
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 8px,
+            currentcolor 8px,
+            currentcolor 10px
+        );
 }
