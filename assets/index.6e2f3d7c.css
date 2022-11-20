@@ -1,1 +1,0 @@
-*{margin:0}#root{display:grid;gap:1rem;padding:1rem}.clips{display:flex;flex-wrap:wrap;gap:1rem}figure{width:10rem;display:grid}svg{grid-area:1 / 1}figcaption{grid-area:1 / 1;user-select:none;-webkit-user-select:none;overflow:hidden}
