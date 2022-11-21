@@ -23,24 +23,22 @@ figure {
     display: grid;
 }
 .active svg, .active figcaption {
-    transform: scale(0.95);
+    transform: scale(0.925);
+}
+svg, figcaption {
+    transition-property: transform;
+    transition-duration: 75ms;
+    transition-timing-function: cubic-bezier();
 }
 svg {
     background: 
     linear-gradient(0deg, #0004, transparent calc(var(--rms) * 2 * 100%)),
     linear-gradient(180deg, #0004, transparent calc(var(--rms) * 2 * 100%));
-    transition-property: transform;
-    transition-duration: 75ms;
-    transition-timing-function: cubic-bezier();
     grid-area: 1 / 1;
     border: 0.1rem solid black;
     background-color: white;
 }
 figcaption {
-    transition-property: transform;
-    transition-duration: 75ms;
-    transition-timing-function: cubic-bezier();
-
     padding: 0.5rem;
     grid-area: 1 / 1;
     overflow: hidden;

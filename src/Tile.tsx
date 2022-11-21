@@ -7,6 +7,7 @@ import { FFT_SIZE } from "./FFT_SIZE";
 type Props = { clip: Clip };
 
 export const Tile = (props: Props) => {
+  let range: HTMLInputElement;
   const analyser = audioContext.createAnalyser();
   const samples = new Float32Array(FFT_SIZE);
   let animationFrame: number;
@@ -20,6 +21,8 @@ export const Tile = (props: Props) => {
   const createNode = () => {
     const node = audioContext.createBufferSource();
     node.buffer = props.clip.buffer;
+    node.playbackRate.value = parseFloat(range.value);
+    node.loop = true;
     node.connect(out);
     node.start();
     node.connect(analyser);
@@ -69,6 +72,21 @@ export const Tile = (props: Props) => {
         <p>{props.clip.buffer.duration.toFixed(2)}s</p>
         <p>{props.clip.buffer.numberOfChannels} channel</p>
       </figcaption>
+      <input
+        ref={range}
+        type="range"
+        name="speed"
+        min="0.5"
+        max="2"
+        step="0.001"
+        value="1"
+        onInput={(e) =>
+          setNode((node) => {
+            if (!node) return;
+            node.playbackRate.value = parseFloat(e.currentTarget.value);
+            return node;
+          })}
+      />
     </figure>
   );
 };
