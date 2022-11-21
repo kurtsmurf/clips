@@ -6,7 +6,7 @@ import { Tile } from "./Tile";
 export const App = () => {
   return (
     <>
-      <AudioInput onChange={onChange} />
+      <AudioInput onChange={addClips} />
       <div class="clips">
         <For each={clips()}>
           {(clip) => <Tile clip={clip} />}
@@ -18,7 +18,7 @@ export const App = () => {
 
 const [clips, setClips] = createSignal<Clip[]>([]);
 
-const onChange = (newClips: Clip[]) => setClips(deduplicate(clips(), newClips));
+const addClips = (newClips: Clip[]) => setClips(deduplicate(clips(), newClips));
 
 const deduplicate = (oldClips: Clip[], newClips: Clip[]) => {
   const isNew = (clip: Clip) =>
