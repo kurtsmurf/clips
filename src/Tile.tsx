@@ -42,18 +42,14 @@ export const Tile = (props: Props) => {
   };
 
   const play = () => {
-    if (node()) {
-      stop();
-      return;
-    }
+    if (node()) return stop();
     setNode(createNode());
     animationFrame = requestAnimationFrame(tick);
   };
 
   const stop = () => {
-    try {
-      node()?.stop();
-    } catch {}
+    const current = node();
+    if (current) current.stop();
     setNode(undefined);
     cancelAnimationFrame(animationFrame);
     setD("");
@@ -65,13 +61,11 @@ export const Tile = (props: Props) => {
       <figure
         style={`--rms: ${rms()}`}
         class={node() ? "active" : undefined}
-        onMouseDown={play}
+        onPointerDown={e => { play()}}
         onMouseEnter={(e) => e.buttons && play()}
-        onMouseUp={() => holdSignal() || stop()}
-        onMouseLeave={() => holdSignal() || stop()}
-        onTouchStart={play}
-        onTouchEnd={() => holdSignal() || stop()}
-        onTouchCancel={stop}
+        onPointerUp={() => !holdSignal() && stop()}
+        onPointerLeave={() => !holdSignal() && stop()}
+        onPointerCancel={() => !holdSignal() && stop()}
       >
         <svg viewBox="0 -1 2 2">
           <path d={d()} stroke="black" stroke-width=".03" fill="none" />
