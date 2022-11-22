@@ -60,56 +60,67 @@ export const Tile = (props: Props) => {
     setRms(0);
   };
 
-  return [
-    <figure
-      style={`--rms: ${rms()}`}
-      class={node() ? "active" : undefined}
-      onMouseDown={play}
-      onMouseEnter={(e) => e.buttons && play()}
-      onMouseUp={() => holdSignal() || stop()}
-      onMouseLeave={() => holdSignal() || stop()}
-      onTouchStart={play}
-      onTouchEnd={() => holdSignal() || stop()}
-      onTouchCancel={stop}
-    >
-      <svg viewBox="0 -1 2 2">
-        <path d={d()} stroke="black" stroke-width=".03" fill="none" />
-      </svg>
-      <figcaption>
-        <p>{props.clip.name}</p>
-        <p>{props.clip.buffer.duration.toFixed(2)}s</p>
-        <p>{props.clip.buffer.numberOfChannels} channel</p>
-      </figcaption>
-    </figure>,
-    <div class="controls">
-      <input
-        ref={speed}
-        type="range"
-        name="speed"
-        min="0.5"
-        max="2"
-        step="0.001"
-        value="1"
-        onInput={(e) =>
-          setNode((node) => {
-            if (!node) return;
-            node.playbackRate.value = parseFloat(e.currentTarget.value);
-            return node;
-          })}
-      />
-      <input
-        ref={loop}
-        type="checkbox"
-        name="loop"
-      />
-      <input
-        type="checkbox"
-        name="hold"
-        checked={holdSignal()}
-        onInput={() => setHoldSignal((prev) => !prev)}
-      />
-    </div>,
-  ];
+  return (
+    <article>
+      <figure
+        style={`--rms: ${rms()}`}
+        class={node() ? "active" : undefined}
+        onMouseDown={play}
+        onMouseEnter={(e) => e.buttons && play()}
+        onMouseUp={() => holdSignal() || stop()}
+        onMouseLeave={() => holdSignal() || stop()}
+        onTouchStart={play}
+        onTouchEnd={() => holdSignal() || stop()}
+        onTouchCancel={stop}
+      >
+        <svg viewBox="0 -1 2 2">
+          <path d={d()} stroke="black" stroke-width=".03" fill="none" />
+        </svg>
+        <figcaption>
+          <p>{props.clip.name}</p>
+          <p>{props.clip.buffer.duration.toFixed(2)}s</p>
+          <p>{props.clip.buffer.numberOfChannels} channel</p>
+        </figcaption>
+      </figure>
+      <div class="controls">
+        <label>
+          <span>Speed</span>
+          <input
+            ref={speed}
+            type="range"
+            name="speed"
+            min="0.5"
+            max="2"
+            step="0.001"
+            value="1"
+            onInput={(e) =>
+              setNode((node) => {
+                if (!node) return;
+                node.playbackRate.value = parseFloat(e.currentTarget.value);
+                return node;
+              })}
+          />
+        </label>
+        <label>
+          <span>Loop</span>
+          <input
+            ref={loop}
+            type="checkbox"
+            name="loop"
+          />
+        </label>
+        <label>
+          <span>Hold</span>
+          <input
+            type="checkbox"
+            name="hold"
+            checked={holdSignal()}
+            onInput={() => setHoldSignal((prev) => !prev)}
+          />
+        </label>
+      </div>
+    </article>
+  );
 };
 
 const rmsOfSamples = (samples: Float32Array) =>

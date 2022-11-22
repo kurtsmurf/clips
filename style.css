@@ -69,3 +69,20 @@ figure::before {
     currentcolor 10px
   );
 }
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+label {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+input[type="range"] {
+  width: 100%;
+}
+article {
+  display: grid;
+  gap: 1rem;
+}
