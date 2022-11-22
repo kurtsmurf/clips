@@ -12,8 +12,9 @@ export const Tile = (props: Props) => {
 
   let speed: HTMLInputElement | undefined;
   let loop: HTMLInputElement | undefined;
-  let hold: HTMLInputElement | undefined;
   let animationFrame: number;
+
+  const [holdSignal, setHoldSignal] = createSignal(false);
 
   const [node, setNode] = createSignal<AudioBufferSourceNode | undefined>(
     undefined,
@@ -26,6 +27,7 @@ export const Tile = (props: Props) => {
     node.buffer = props.clip.buffer;
     node.playbackRate.value = speed ? parseFloat(speed.value) : 1;
     node.loop = loop ? loop.checked : false;
+    node.onended = stop;
     node.connect(out);
     node.connect(analyser);
     node.start();
@@ -40,7 +42,10 @@ export const Tile = (props: Props) => {
   };
 
   const play = () => {
-    if (node()) return;
+    if (node()) {
+      stop();
+      return;
+    }
     setNode(createNode());
     animationFrame = requestAnimationFrame(tick);
   };
@@ -55,16 +60,16 @@ export const Tile = (props: Props) => {
     setRms(0);
   };
 
-  return (
+  return [
     <figure
       style={`--rms: ${rms()}`}
       class={node() ? "active" : undefined}
       onMouseDown={play}
       onMouseEnter={(e) => e.buttons && play()}
-      onMouseUp={stop}
-      onMouseLeave={stop}
+      onMouseUp={() => holdSignal() || stop()}
+      onMouseLeave={() => holdSignal() || stop()}
       onTouchStart={play}
-      onTouchEnd={stop}
+      onTouchEnd={() => holdSignal() || stop()}
       onTouchCancel={stop}
     >
       <svg viewBox="0 -1 2 2">
@@ -75,6 +80,8 @@ export const Tile = (props: Props) => {
         <p>{props.clip.buffer.duration.toFixed(2)}s</p>
         <p>{props.clip.buffer.numberOfChannels} channel</p>
       </figcaption>
+    </figure>,
+    <div class="controls">
       <input
         ref={speed}
         type="range"
@@ -96,12 +103,13 @@ export const Tile = (props: Props) => {
         name="loop"
       />
       <input
-        ref={hold}
         type="checkbox"
         name="hold"
+        checked={holdSignal()}
+        onInput={() => setHoldSignal((prev) => !prev)}
       />
-    </figure>
-  );
+    </div>,
+  ];
 };
 
 const rmsOfSamples = (samples: Float32Array) =>
