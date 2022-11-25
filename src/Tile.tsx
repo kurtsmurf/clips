@@ -4,6 +4,8 @@ import { createSignal } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
+const TOUCH_ENABLED = 'ontouchstart' in window;
+
 type Props = { clip: Clip };
 
 export const Tile = (props: Props) => {
@@ -61,11 +63,12 @@ export const Tile = (props: Props) => {
       <figure
         style={`--rms: ${rms()}`}
         class={node() ? "active" : undefined}
-        onPointerDown={e => { play()}}
-        onMouseEnter={(e) => e.buttons && play()}
-        onPointerUp={() => !holdSignal() && stop()}
-        onPointerLeave={() => !holdSignal() && stop()}
-        onPointerCancel={() => !holdSignal() && stop()}
+        onTouchStart={play}
+        onTouchEnd={() => !holdSignal() && stop()}
+        onMouseEnter={!TOUCH_ENABLED ? (e) => e.buttons && play() : undefined}
+        onMouseDown={!TOUCH_ENABLED ? play : undefined}
+        onMouseUp={!TOUCH_ENABLED ? () => !holdSignal() && stop() : undefined}
+        onMouseLeave={!TOUCH_ENABLED ? () => !holdSignal() && stop() : undefined}
       >
         <svg viewBox="0 -1 2 2">
           <path d={d()} stroke="black" stroke-width=".03" fill="none" />
