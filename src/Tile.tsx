@@ -4,14 +4,19 @@ import { createSignal } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
-const TOUCH_ENABLED = 'ontouchstart' in window;
+const TOUCH_ENABLED = "ontouchstart" in window;
 
 type Props = { clip: Clip };
 
 export const Tile = (props: Props) => {
   const analyser = audioContext.createAnalyser();
+  const gainNode = audioContext.createGain();
+  gainNode.gain.value = 1;
+  gainNode.connect(out);
+  gainNode.connect(analyser);
   const samples = new Float32Array(FFT_SIZE);
 
+  let gain: HTMLInputElement | undefined;
   let speed: HTMLInputElement | undefined;
   let loop: HTMLInputElement | undefined;
   let animationFrame: number;
@@ -30,8 +35,7 @@ export const Tile = (props: Props) => {
     node.playbackRate.value = speed ? parseFloat(speed.value) : 1;
     node.loop = loop ? loop.checked : false;
     node.onended = stop;
-    node.connect(out);
-    node.connect(analyser);
+    node.connect(gainNode);
     node.start();
     return node;
   };
@@ -68,7 +72,9 @@ export const Tile = (props: Props) => {
         onMouseEnter={!TOUCH_ENABLED ? (e) => e.buttons && play() : undefined}
         onMouseDown={!TOUCH_ENABLED ? play : undefined}
         onMouseUp={!TOUCH_ENABLED ? () => !holdSignal() && stop() : undefined}
-        onMouseLeave={!TOUCH_ENABLED ? () => !holdSignal() && stop() : undefined}
+        onMouseLeave={!TOUCH_ENABLED
+          ? () => !holdSignal() && stop()
+          : undefined}
       >
         <svg viewBox="0 -1 2 2">
           <path d={d()} stroke="black" stroke-width=".03" fill="none" />
@@ -96,6 +102,21 @@ export const Tile = (props: Props) => {
                 node.playbackRate.value = parseFloat(e.currentTarget.value);
                 return node;
               })}
+          />
+        </label>
+        <label>
+          <span>Gain</span>
+          <input
+            ref={gain}
+            type="range"
+            name="gain"
+            min="0"
+            max="1"
+            step="0.01"
+            value="1"
+            onInput={(e) => {
+              gainNode.gain.value = parseFloat(e.currentTarget.value);
+            }}
           />
         </label>
         <label>
