@@ -70,6 +70,7 @@ figure::before {
   grid-area: 1 / 1;
   background-image: var(--diagonal-lines);
 }
+figure::before, figure > * { border-radius: 10px; }
 .controls {
   display: flex;
   flex-direction: column;
@@ -90,6 +91,8 @@ input[type="range"] {
 article {
   display: grid;
   gap: 1rem;
+  /** magic number alert! */
+  max-width: 30rem;
 }
 .audio-input {
   padding-block: 0.5rem;
