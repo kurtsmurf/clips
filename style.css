@@ -70,7 +70,6 @@ figure::before {
   grid-area: 1 / 1;
   background-image: var(--diagonal-lines);
 }
-figure::before, figure > * { border-radius: 10px; }
 .controls {
   display: flex;
   flex-direction: column;
