@@ -5,6 +5,13 @@ html {
   font-family: system-ui, sans-serif;
   user-select: none;
   -webkit-user-select: none;
+  --diagonal-lines: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    currentcolor 8px,
+    currentcolor 10px
+  );
 }
 body {
   filter: invert();
@@ -61,13 +68,7 @@ figcaption p {
 figure::before {
   content: "";
   grid-area: 1 / 1;
-  background-image: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 8px,
-    currentcolor 8px,
-    currentcolor 10px
-  );
+  background-image: var(--diagonal-lines);
 }
 .controls {
   display: flex;
@@ -85,4 +86,19 @@ input[type="range"] {
 article {
   display: grid;
   gap: 1rem;
+}
+.audio-input {
+  display: grid;
+  place-content: center;
+  width: min-content;
+  padding: 0.5rem;
+  /* border: 1px solid; */
+  border-radius: 50%;
+  background-color: #0002;
+}
+
+.audio-input > * {
+  border: none;
+  background: transparent;
+  padding: 0.5rem;
 }
