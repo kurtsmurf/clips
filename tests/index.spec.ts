@@ -6,9 +6,7 @@ test('test', async ({ page }, testInfo) => {
   })
 
   await page.goto('localhost:3000/clips/');
-  await page.getByRole('textbox').click();
-  // await page.getByLabel('Speed').click();
-  // await page.getByLabel('Gain').click();
+  await page.getByText('add clips').click();
   await page.getByLabel('Loop').check();
   await page.getByLabel('Hold').check();
   await page.getByText('sine.wav').click();
@@ -16,7 +14,7 @@ test('test', async ({ page }, testInfo) => {
   testInfo.attach(
     'screenshot',
     {
-      body: await page.locator("figure").screenshot(),
+      body: await page.locator("body").screenshot(),
       contentType: 'image/png'
     }
   );
