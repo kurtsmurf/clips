@@ -21,15 +21,16 @@ const Tiles = () => (
 
 const [clips, setClips] = createSignal<Clip[]>([]);
 
-const addClips = (newClips: Clip[]) => setClips(deduplicate(clips(), newClips));
+const addClips = (newClips: Clip[]) => setClips(deduplicate(newClips));
 
-const deduplicate = (oldClips: Clip[], newClips: Clip[]) => {
-  const isNew = (clip: Clip) =>
-    !oldClips.find((oldClip) =>
-      oldClip.name === clip.name &&
-      oldClip.buffer.length === clip.buffer.length
-    );
-  return [...oldClips, ...newClips.filter(isNew)];
+const isNew = (clip: Clip) =>
+  !clips().find((oldClip) =>
+    oldClip.name === clip.name &&
+    oldClip.buffer.length === clip.buffer.length
+  );
+
+const deduplicate = (newClips: Clip[]) => {
+  return [...clips(), ...newClips.filter(isNew)];
 };
 
 // load sample audio stored in s3
