@@ -10,10 +10,6 @@ type Props = { clip: Clip };
 
 export const Tile = (props: Props) => {
   const analyser = audioContext.createAnalyser();
-  const gainNode = audioContext.createGain();
-  gainNode.gain.value = 1;
-  gainNode.connect(out);
-  gainNode.connect(analyser);
   const samples = new Float32Array(FFT_SIZE);
 
   let gain: HTMLInputElement | undefined;
@@ -22,23 +18,11 @@ export const Tile = (props: Props) => {
   let animationFrame: number;
 
   const [holdSignal, setHoldSignal] = createSignal(false);
-
-  const [node, setNode] = createSignal<AudioBufferSourceNode | undefined>(
+  const [player, setPlayer] = createSignal<Player | undefined>(
     undefined,
   );
   const [d, setD] = createSignal("");
   const [rms, setRms] = createSignal(0);
-
-  const createNode = () => {
-    const node = audioContext.createBufferSource();
-    node.buffer = props.clip.buffer;
-    node.playbackRate.value = speed ? parseFloat(speed.value) : 1;
-    node.loop = loop ? loop.checked : false;
-    node.onended = stop;
-    node.connect(gainNode);
-    node.start();
-    return node;
-  };
 
   const tick = () => {
     analyser.getFloatTimeDomainData(samples);
@@ -48,15 +32,25 @@ export const Tile = (props: Props) => {
   };
 
   const play = () => {
-    if (node()) return stop();
-    setNode(createNode());
+    if (player()) return stop();
+
+    const newPlayer = new Player(props.clip.buffer);
+    newPlayer.playbackRate.value = speed ? parseFloat(speed.value) : 1;
+    newPlayer.gain.value = gain ? parseFloat(gain.value) : 1;
+    newPlayer.loop = loop ? loop.checked : false;
+    newPlayer.onended = () => player() === newPlayer && stop();
+    newPlayer.connect(analyser);
+    newPlayer.connect(out);
+    newPlayer.start();
+
+    setPlayer(newPlayer);
     animationFrame = requestAnimationFrame(tick);
   };
 
   const stop = () => {
-    const current = node();
+    const current = player();
     if (current) current.stop();
-    setNode(undefined);
+    setPlayer(undefined);
     cancelAnimationFrame(animationFrame);
     setD("");
     setRms(0);
@@ -66,7 +60,7 @@ export const Tile = (props: Props) => {
     <article>
       <figure
         style={`--rms: ${rms()}`}
-        class={node() ? "active" : undefined}
+        class={player() ? "active" : undefined}
         onTouchStart={play}
         onTouchEnd={() => !holdSignal() && stop()}
         onMouseEnter={!TOUCH_ENABLED ? (e) => e.buttons && play() : undefined}
@@ -97,7 +91,7 @@ export const Tile = (props: Props) => {
             step="0.001"
             value="1"
             onInput={(e) =>
-              setNode((node) => {
+              setPlayer((node) => {
                 if (!node) return;
                 node.playbackRate.value = parseFloat(e.currentTarget.value);
                 return node;
@@ -115,7 +109,10 @@ export const Tile = (props: Props) => {
             step="0.01"
             value="1"
             onInput={(e) => {
-              gainNode.gain.value = parseFloat(e.currentTarget.value);
+              const current = player();
+              if (current) {
+                current.gain.value = parseFloat(e.currentTarget.value);
+              }
             }}
           />
         </label>
@@ -143,3 +140,55 @@ export const Tile = (props: Props) => {
 
 const rmsOfSamples = (samples: Float32Array) =>
   samples.reduce((acc, cur) => acc + Math.abs(cur), 0) / samples.length;
+
+class Player {
+  private gainNode = audioContext.createGain();
+  private bufferSourceNode = audioContext.createBufferSource();
+  private release = 0.1;
+
+  constructor(buffer: AudioBuffer) {
+    this.bufferSourceNode.buffer = buffer;
+    this.bufferSourceNode.connect(this.gainNode);
+  }
+
+  connect(destinationNode: AudioNode) {
+    this.gainNode.connect(destinationNode);
+  }
+
+  start() {
+    this.bufferSourceNode.start();
+  }
+
+  stop() {
+    this.gainNode.gain.value = this.gainNode.gain.value; // set starting value for linear ramp
+    this.gainNode.gain.linearRampToValueAtTime(
+      0,
+      audioContext.currentTime + this.release,
+    );
+    this.bufferSourceNode.stop(audioContext.currentTime + this.release);
+  }
+
+  get playbackRate() {
+    return this.bufferSourceNode.playbackRate;
+  }
+
+  get loop() {
+    return this.bufferSourceNode.loop;
+  }
+
+  set loop(val) {
+    this.bufferSourceNode.loop = val;
+  }
+
+  get gain() {
+    return this.gainNode.gain;
+  }
+
+  get onended() {
+    return this.bufferSourceNode.onended;
+  }
+
+  set onended(fn) {
+    this.bufferSourceNode.onended = fn;
+  }
+}
