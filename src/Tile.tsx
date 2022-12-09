@@ -1,6 +1,6 @@
 import { audioContext, out } from "./audioContext";
 import { Clip } from "./Clip";
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
@@ -12,15 +12,27 @@ export const Tile = (props: Props) => {
   const analyser = audioContext.createAnalyser();
   const samples = new Float32Array(FFT_SIZE);
 
-  let gain: HTMLInputElement | undefined;
-  let speed: HTMLInputElement | undefined;
-  let loop: HTMLInputElement | undefined;
   let animationFrame: number;
 
-  const [holdSignal, setHoldSignal] = createSignal(false);
+  // settings
+  const [gain, setGain] = createSignal(1);
+  const [speed, setSpeed] = createSignal(1);
+  const [loop, setLoop] = createSignal(false);
+  const [hold, setHold] = createSignal(false);
+
+  // audio player
   const [player, setPlayer] = createSignal<Player | undefined>(
     undefined,
   );
+
+  // synchronize audio player properties with settings
+  createEffect(() => {
+    player()?.playbackRate.setValueAtTime(speed(), audioContext.currentTime);
+  });
+  createEffect(() => {
+    player()?.gain.setValueAtTime(gain(), audioContext.currentTime);
+  });
+
   const [d, setD] = createSignal("");
   const [rms, setRms] = createSignal(0);
 
@@ -35,9 +47,9 @@ export const Tile = (props: Props) => {
     if (player()) return stop();
 
     const newPlayer = new Player(props.clip.buffer);
-    newPlayer.playbackRate.value = speed ? parseFloat(speed.value) : 1;
-    newPlayer.gain.value = gain ? parseFloat(gain.value) : 1;
-    newPlayer.loop = loop ? loop.checked : false;
+    newPlayer.playbackRate.value = speed();
+    newPlayer.gain.value = gain();
+    newPlayer.loop = loop();
     newPlayer.onended = () => player() === newPlayer && stop();
     newPlayer.connect(analyser);
     newPlayer.connect(out);
@@ -48,8 +60,7 @@ export const Tile = (props: Props) => {
   };
 
   const stop = () => {
-    const current = player();
-    if (current) current.stop();
+    player()?.stop();
     setPlayer(undefined);
     cancelAnimationFrame(animationFrame);
     setD("");
@@ -62,13 +73,11 @@ export const Tile = (props: Props) => {
         style={`--rms: ${rms()}`}
         class={player() ? "active" : undefined}
         onTouchStart={play}
-        onTouchEnd={() => !holdSignal() && stop()}
+        onTouchEnd={() => !hold() && stop()}
         onMouseEnter={!TOUCH_ENABLED ? (e) => e.buttons && play() : undefined}
         onMouseDown={!TOUCH_ENABLED ? play : undefined}
-        onMouseUp={!TOUCH_ENABLED ? () => !holdSignal() && stop() : undefined}
-        onMouseLeave={!TOUCH_ENABLED
-          ? () => !holdSignal() && stop()
-          : undefined}
+        onMouseUp={!TOUCH_ENABLED ? () => !hold() && stop() : undefined}
+        onMouseLeave={!TOUCH_ENABLED ? () => !hold() && stop() : undefined}
       >
         <svg viewBox="0 -1 2 2">
           <path d={d()} stroke="black" stroke-width=".03" fill="none" />
@@ -90,12 +99,7 @@ export const Tile = (props: Props) => {
             max="2"
             step="0.001"
             value="1"
-            onInput={(e) =>
-              setPlayer((node) => {
-                if (!node) return;
-                node.playbackRate.value = parseFloat(e.currentTarget.value);
-                return node;
-              })}
+            onInput={(e) => setSpeed(parseFloat(e.currentTarget.value))}
           />
         </label>
         <label>
@@ -109,10 +113,7 @@ export const Tile = (props: Props) => {
             step="0.01"
             value="1"
             onInput={(e) => {
-              const current = player();
-              if (current) {
-                current.gain.value = parseFloat(e.currentTarget.value);
-              }
+              setGain(parseFloat(e.currentTarget.value));
             }}
           />
         </label>
@@ -122,6 +123,7 @@ export const Tile = (props: Props) => {
             ref={loop}
             type="checkbox"
             name="loop"
+            onInput={(e) => setLoop(e.currentTarget.checked)}
           />
         </label>
         <label>
@@ -129,8 +131,8 @@ export const Tile = (props: Props) => {
           <input
             type="checkbox"
             name="hold"
-            checked={holdSignal()}
-            onInput={() => setHoldSignal((prev) => !prev)}
+            checked={hold()}
+            onInput={(e) => setHold(e.currentTarget.checked)}
           />
         </label>
       </div>
