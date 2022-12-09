@@ -42,12 +42,12 @@ figcaption {
   transition-timing-function: cubic-bezier();
 }
 svg {
-  background: linear-gradient(
+  /* background: linear-gradient(
       0deg,
       #0004,
       transparent calc(var(--rms) * 2 * 100%)
     ),
-    linear-gradient(180deg, #0004, transparent calc(var(--rms) * 2 * 100%));
+    linear-gradient(180deg, #0004, transparent calc(var(--rms) * 2 * 100%)); */
   grid-area: 1 / 1;
   border: 0.1rem solid black;
   background-color: white;
