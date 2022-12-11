@@ -63,7 +63,6 @@ export const Tile = (props: Props) => {
     setPlayer(undefined);
     cancelAnimationFrame(animationFrame);
     setD("");
-    setRms(0);
   };
 
   return (
