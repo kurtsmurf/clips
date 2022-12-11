@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "npx playwright test && npx playwright show-report"
   },
   "license": "MIT",
   "devDependencies": {

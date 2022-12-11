@@ -22,7 +22,7 @@ body {
   padding: 2rem;
   gap: 2rem;
 }
-.clips {
+.tiles {
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -80,7 +80,6 @@ label {
   gap: 0.5rem;
   justify-content: space-between;
 }
-
 label svg {
   width: 1rem;
 }
@@ -101,7 +100,6 @@ article {
   margin-right: auto;
   cursor: pointer;
 }
-
 .audio-input > * {
   border: none;
   background: transparent;

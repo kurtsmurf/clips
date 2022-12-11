@@ -1,7 +1,7 @@
 import { createSignal, For } from "solid-js";
 import { audioContext } from "./audioContext";
 import { AudioInput } from "./AudioInput";
-import { Clip } from "./Clip";
+import { Clip } from "./clip";
 import { Tile } from "./Tile";
 
 export const App = () => (
@@ -12,7 +12,7 @@ export const App = () => (
 );
 
 const Tiles = () => (
-  <div class="clips">
+  <div class="tiles">
     <For each={clips()}>
       {(clip) => <Tile clip={clip} />}
     </For>

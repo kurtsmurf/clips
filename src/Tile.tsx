@@ -1,5 +1,5 @@
 import { audioContext, out } from "./audioContext";
-import { Clip } from "./Clip";
+import { Clip } from "./clip";
 import { createEffect, createSignal } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
@@ -33,13 +33,12 @@ export const Tile = (props: Props) => {
     player()?.gain.setValueAtTime(gain(), audioContext.currentTime);
   });
 
+  // the path definition
   const [d, setD] = createSignal("");
-  const [rms, setRms] = createSignal(0);
 
   const tick = () => {
     analyser.getFloatTimeDomainData(samples);
     setD(pathOfFloat32Array(samples));
-    setRms(rmsOfSamples(samples));
     animationFrame = requestAnimationFrame(tick);
   };
 
@@ -70,7 +69,6 @@ export const Tile = (props: Props) => {
   return (
     <article>
       <figure
-        style={`--rms: ${rms()}`}
         class={player() ? "active" : undefined}
         onTouchStart={play}
         onTouchEnd={() => !hold() && stop()}
@@ -92,7 +90,6 @@ export const Tile = (props: Props) => {
         <label>
           <span>Speed</span>
           <input
-            ref={speed}
             type="range"
             name="speed"
             min="0.5"
@@ -105,7 +102,6 @@ export const Tile = (props: Props) => {
         <label>
           <span>Gain</span>
           <input
-            ref={gain}
             type="range"
             name="gain"
             min="0"
@@ -120,7 +116,6 @@ export const Tile = (props: Props) => {
         <label>
           <span>Loop</span>
           <input
-            ref={loop}
             type="checkbox"
             name="loop"
             onInput={(e) => setLoop(e.currentTarget.checked)}
@@ -139,9 +134,6 @@ export const Tile = (props: Props) => {
     </article>
   );
 };
-
-const rmsOfSamples = (samples: Float32Array) =>
-  samples.reduce((acc, cur) => acc + Math.abs(cur), 0) / samples.length;
 
 class Player {
   private gainNode = audioContext.createGain();
@@ -162,12 +154,11 @@ class Player {
   }
 
   stop() {
-    this.gainNode.gain.value = this.gainNode.gain.value; // set starting value for linear ramp
-    this.gainNode.gain.linearRampToValueAtTime(
-      0,
-      audioContext.currentTime + this.release,
-    );
-    this.bufferSourceNode.stop(audioContext.currentTime + this.release);
+    const end = audioContext.currentTime + this.release;
+    // set starting value for linear ramp
+    this.gainNode.gain.value = this.gainNode.gain.value;
+    this.gainNode.gain.linearRampToValueAtTime(0, end);
+    this.bufferSourceNode.stop(end);
   }
 
   get playbackRate() {

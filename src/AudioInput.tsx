@@ -1,5 +1,5 @@
 import { audioContext } from "./audioContext";
-import { Clip } from "./Clip";
+import { Clip } from "./clip";
 
 type Props = { onChange: (clips: Clip[]) => void };
 
