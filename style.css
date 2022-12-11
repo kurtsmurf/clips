@@ -2,16 +2,10 @@
   margin: 0;
 }
 html {
+  font-size: 1.25rem;
   font-family: system-ui, sans-serif;
   user-select: none;
   -webkit-user-select: none;
-  --diagonal-lines: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 8px,
-    currentcolor 8px,
-    currentcolor 10px
-  );
 }
 body {
   filter: invert();
@@ -42,18 +36,11 @@ figcaption {
   transition-timing-function: cubic-bezier();
 }
 svg {
-  /* background: linear-gradient(
-      0deg,
-      #0004,
-      transparent calc(var(--rms) * 2 * 100%)
-    ),
-    linear-gradient(180deg, #0004, transparent calc(var(--rms) * 2 * 100%)); */
   grid-area: 1 / 1;
-  border: 0.1rem solid black;
   background-color: white;
 }
 figcaption {
-  padding: 0.5rem;
+  padding: .5rem;
   grid-area: 1 / 1;
   overflow: hidden;
   display: flex;
@@ -68,7 +55,7 @@ figcaption p {
 figure::before {
   content: "";
   grid-area: 1 / 1;
-  background-image: var(--diagonal-lines);
+  background-image: url("diagonal-lines-backdrop.svg");
 }
 .controls {
   display: flex;
