@@ -35,15 +35,16 @@ const deduplicate = (newClips: Clip[]) => {
 
 // load sample audio stored in s3
 
-const promises = [
+[
   "https://clips-audio.s3.amazonaws.com/büm.mp3",
   "https://clips-audio.s3.amazonaws.com/baf.mp3",
+  "https://clips-audio.s3.amazonaws.com/suns.mp3",
+  "https://clips-audio.s3.amazonaws.com/pew.mp3",
 ]
   .map((url) =>
     fetch(url)
       .then((response) => response.arrayBuffer())
       .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
       .then((audioBuffer) => ({ name: url.slice(-7), buffer: audioBuffer }))
+      .then(clip => addClips([clip]))
   );
-
-Promise.all(promises).then(addClips);
