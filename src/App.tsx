@@ -45,6 +45,6 @@ const deduplicate = (newClips: Clip[]) => {
     fetch(url)
       .then((response) => response.arrayBuffer())
       .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
-      .then((audioBuffer) => ({ name: url.slice(-7), buffer: audioBuffer }))
+      .then((audioBuffer) => ({ name: url.substring(url.lastIndexOf("/") + 1), buffer: audioBuffer }))
       .then(clip => addClips([clip]))
   );

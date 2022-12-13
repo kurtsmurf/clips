@@ -198,15 +198,15 @@ class Player {
     this.bufferSourceNode.loop = val;
   }
 
-  get gain() {
-    return this.gainNode.gain;
-  }
-
   get onended() {
     return this.bufferSourceNode.onended;
   }
 
   set onended(fn) {
     this.bufferSourceNode.onended = fn;
+  }
+
+  get gain() {
+    return this.gainNode.gain;
   }
 }
