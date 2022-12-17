@@ -41,7 +41,7 @@ const deduplicate = (newClips: Clip[]) => {
   "https://clips-audio.s3.amazonaws.com/suns.mp3",
   "https://clips-audio.s3.amazonaws.com/pew.mp3",
 ]
-  .map((url) =>
+  .forEach((url) =>
     fetch(url)
       .then((response) => response.arrayBuffer())
       .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
