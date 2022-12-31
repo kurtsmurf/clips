@@ -22,43 +22,31 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 figure {
-  --rms: 0;
   display: grid;
+  border: 4px dashed #ddd;
 }
-.active svg,
-.active figcaption {
-  transform: scale(0.925);
-}
-svg,
-figcaption {
-  transition-property: transform;
-  transition-duration: 75ms;
-  transition-timing-function: cubic-bezier();
+figure.active,
+.active figcaption p {
+  background: #ddd;
+  border-color: #aaa;
 }
 svg {
   grid-area: 1 / 1;
-  background-color: white;
 }
 figcaption {
-  padding: .5rem;
   grid-area: 1 / 1;
-  overflow: hidden;
+  overflow-wrap: anywhere;
+  padding: .5rem;
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
 }
 figcaption p {
-  padding: 0.25rem;
   margin-right: auto;
-  background-color: #fffa;
 }
-figure::before {
-  content: "";
-  grid-area: 1 / 1;
-  background-image: url("diagonal-lines-backdrop.svg");
-}
+
 .controls {
-  display: flex;
+  display: grid;
   flex-direction: column;
   gap: 1rem;
 }
