@@ -46,7 +46,7 @@ figcaption p {
 }
 
 .controls {
-  display: none;
+  display: grid;
   flex-direction: column;
   gap: 1rem;
 }
