@@ -79,31 +79,6 @@ export const Tile = (props: Props) => {
         <svg viewBox="0 -1 2 2">
           {/* waveform */}
           <path d={d()} stroke="black" stroke-width=".025" fill="none" />
-          {/* faux borders */}
-          <path
-            d={"M 0 -1 h 2"}
-            stroke="black"
-            stroke-width=".025"
-            fill="none"
-          />
-          <path
-            d={"M 0 1 h 2"}
-            stroke="black"
-            stroke-width=".025"
-            fill="none"
-          />
-          <path
-            d={"M 0 -1 v 2"}
-            stroke="black"
-            stroke-width=".025"
-            fill="none"
-          />
-          <path
-            d={"M 2 -1 v 2"}
-            stroke="black"
-            stroke-width=".025"
-            fill="none"
-          />
         </svg>
         <figcaption>
           <p>{props.clip.name}</p>
