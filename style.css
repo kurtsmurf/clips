@@ -23,10 +23,11 @@ body {
 }
 figure {
   display: grid;
-  border: 4px dashed #eee;
+  border: 4px dashed #ddd;
 }
-figure.active {
-  background: #efefef;
+figure.active,
+.active figcaption p {
+  background: #ddd;
   border-color: #aaa;
 }
 svg {
@@ -35,14 +36,13 @@ svg {
 figcaption {
   grid-area: 1 / 1;
   overflow-wrap: anywhere;
-  padding: 5px;
+  padding: .5rem;
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
 }
 figcaption p {
   margin-right: auto;
-  background-color: #fffa;
 }
 
 .controls {
