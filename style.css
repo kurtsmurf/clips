@@ -51,7 +51,7 @@ figcaption p {
 .controls {
   display: grid;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 }
 label {
   display: flex;
@@ -81,4 +81,21 @@ article {
 .audio-input > * {
   border: none;
   background: transparent;
+}
+input[type="range"] {
+  appearance: none;
+  cursor: pointer;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #ddd;
+  height: 0.25rem;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -.875rem;
+  height: 2rem;
+  width: 0.75rem;
+  background-color: #aaa;
+  box-shadow: unset;
 }
