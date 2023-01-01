@@ -51,7 +51,7 @@ figcaption p {
 .controls {
   display: grid;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
 }
 label {
   display: flex;
@@ -89,6 +89,7 @@ input[type="range"] {
 input[type="range"]::-webkit-slider-runnable-track {
   background: #ddd;
   height: 0.25rem;
+  margin-block: 1rem;
 }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;

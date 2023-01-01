@@ -87,32 +87,36 @@ export const Tile = (props: Props) => {
         </figcaption>
       </figure>
       <div class="controls">
-        <label>
-          <span>Speed</span>
-          <input
-            type="range"
-            name="speed"
-            min="0.5"
-            max="2"
-            step="0.001"
-            value="1"
-            onInput={(e) => setSpeed(parseFloat(e.currentTarget.value))}
-          />
-        </label>
-        <label>
-          <span>Gain</span>
-          <input
-            type="range"
-            name="gain"
-            min="0"
-            max="1"
-            step="0.01"
-            value="1"
-            onInput={(e) => {
-              setGain(parseFloat(e.currentTarget.value));
-            }}
-          />
-        </label>
+        <div class="range-input">
+          <label>
+            <span>Speed</span>
+          </label>
+            <input
+              type="range"
+              name="speed"
+              min="0.5"
+              max="2"
+              step="0.001"
+              value="1"
+              onInput={(e) => setSpeed(parseFloat(e.currentTarget.value))}
+            />
+        </div>
+        <div class="range-input">
+          <label>
+            <span>Volume</span>
+          </label>
+            <input
+              type="range"
+              name="gain"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+              onInput={(e) => {
+                setGain(parseFloat(e.currentTarget.value));
+              }}
+            />
+        </div>
         <label>
           <span>Loop</span>
           <input
