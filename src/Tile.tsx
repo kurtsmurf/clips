@@ -117,23 +117,25 @@ export const Tile = (props: Props) => {
               }}
             />
         </div>
-        <label>
-          <span>Loop</span>
-          <input
-            type="checkbox"
-            name="loop"
-            onInput={(e) => setLoop(e.currentTarget.checked)}
-          />
-        </label>
-        <label>
-          <span>Hold</span>
-          <input
-            type="checkbox"
-            name="hold"
-            checked={hold()}
-            onInput={(e) => setHold(e.currentTarget.checked)}
-          />
-        </label>
+        <div class="checkboxes">
+          <label>
+            <input
+              type="checkbox"
+              name="loop"
+              onInput={(e) => setLoop(e.currentTarget.checked)}
+            />
+            <span>Loop</span>
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="hold"
+              checked={hold()}
+              onInput={(e) => setHold(e.currentTarget.checked)}
+            />
+            <span>Hold</span>
+          </label>
+        </div>
       </div>
     </article>
   );
