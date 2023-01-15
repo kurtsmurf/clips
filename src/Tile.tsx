@@ -30,7 +30,13 @@ export const Tile = (props: Props) => {
     player()?.playbackRate.setValueAtTime(speed(), audioContext.currentTime);
   });
   createEffect(() => {
-    player()?.gain.setValueAtTime(gain(), audioContext.currentTime);
+    // when synchronizing gain, use linear ramp instead
+    // of setting value instantly to prevent unpleasant
+    // popping noises
+    const p = player();
+    p?.gain.cancelScheduledValues(audioContext.currentTime);
+    p?.gain.setValueAtTime(p.gain.value, audioContext.currentTime);
+    p?.gain.linearRampToValueAtTime(gain(), audioContext.currentTime + 0.1);
   });
 
   // the path definition
