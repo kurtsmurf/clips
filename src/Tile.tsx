@@ -4,6 +4,15 @@ import { createEffect, createSignal } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
+// bad news alert
+// why not use pointer events?
+// ran into trouble with mouseenter
+// touch device was firing
+//   pointerDown & mouseenter
+//   which results in start() x2
+//   second "start" kills the first
+//   and tile stays off
+// TODO: make better :))))
 const TOUCH_ENABLED = "ontouchstart" in window;
 
 type Props = { clip: Clip };
@@ -73,6 +82,15 @@ export const Tile = (props: Props) => {
 
   return (
     <article>
+      {/*
+        bad news alert pt. 2
+        see below we use TOUCH_ENABLED to dictate which event
+        handlers to attach.
+        what happens on a hybrid device like a tablet with a mouse?
+        in that case ["ontouchstart" in window] would prob be true
+        which would disable the mouse
+        not great
+      */}
       <figure
         class={player() ? "active" : undefined}
         onTouchStart={play}
@@ -197,3 +215,4 @@ class Player {
     return this.gainNode.gain;
   }
 }
+ 
