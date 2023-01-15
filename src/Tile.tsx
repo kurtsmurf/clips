@@ -99,6 +99,26 @@ export const Tile = (props: Props) => {
         onMouseDown={!TOUCH_ENABLED ? play : undefined}
         onMouseUp={!TOUCH_ENABLED ? () => !hold() && stop() : undefined}
         onMouseLeave={!TOUCH_ENABLED ? () => !hold() && stop() : undefined}
+        onKeyDown={(e) => {
+          if (e.key !== " ") return
+          if (hold()) {
+            if (player()) {
+              stop();
+            } else {
+              play();
+            }
+          } else {
+            if (!player()) {
+              play()
+            }
+          }
+          e.preventDefault();
+        }}
+        onKeyUp={(e) => {
+          e.key === " " && !hold() && stop();
+          e.key === " " && e.preventDefault();
+        }}
+        tabIndex="0"
       >
         <svg viewBox="0 -1 2 2">
           {/* waveform */}
