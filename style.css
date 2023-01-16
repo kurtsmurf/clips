@@ -7,10 +7,13 @@ html {
   user-select: none;
   -webkit-user-select: none;
 }
+/**
+  TODO: use a real color palette and remove filter:invert hack
+*/
 body {
   filter: invert();
   background-color: black;
-} /** :o */
+}
 #root {
   display: grid;
   padding: 2rem;
@@ -86,6 +89,7 @@ article {
 input[type="range"] {
   appearance: none;
   cursor: pointer;
+  height: 2rem;
 }
 input[type="range"]::-webkit-slider-runnable-track {
   background: #ddd;
@@ -111,7 +115,6 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 input:checked {
-  /* background: #ddd; */
   border-color: #aaa;
 }
 label:has(input:checked) {
@@ -127,4 +130,8 @@ label:has(input[type="checkbox"]) {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
+}
+*:focus-visible {
+  outline: 2px solid black;
+  outline-offset: 0;
 }
