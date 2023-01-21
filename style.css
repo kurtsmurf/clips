@@ -135,3 +135,7 @@ label:has(input[type="checkbox"]) {
   outline: 2px solid black;
   outline-offset: 0;
 }
+.range-input {
+  display: grid;
+  gap: 0.25rem;
+}
