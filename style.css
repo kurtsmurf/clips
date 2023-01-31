@@ -48,10 +48,12 @@ figcaption {
   overflow: hidden;
 }
 figcaption p {
-  margin-right: auto;
   white-space: nowrap;
+  margin-right: auto;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-
 .controls {
   display: grid;
   flex-direction: column;
