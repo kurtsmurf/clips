@@ -1,6 +1,6 @@
 import { createSignal, For } from "solid-js";
 import { audioContext } from "./audioContext";
-import { AudioInput } from "./AudioInput";
+import { AudioInput, hashOfArrayBuffer } from "./AudioInput";
 import { Clip } from "./clip";
 import { Tile } from "./Tile";
 
@@ -40,11 +40,18 @@ const deduplicate = (newClips: Clip[]) => {
   "https://clips-audio.s3.amazonaws.com/baf.mp3",
   "https://clips-audio.s3.amazonaws.com/suns.mp3",
   "https://clips-audio.s3.amazonaws.com/pew.mp3",
-]
-  .forEach((url) =>
-    fetch(url)
-      .then((response) => response.arrayBuffer())
-      .then((arrayBuffer) => audioContext.decodeAudioData(arrayBuffer))
-      .then((audioBuffer) => ({ name: url.substring(url.lastIndexOf("/") + 1), buffer: audioBuffer }))
-      .then(clip => addClips([clip]))
-  );
+].forEach((url) =>
+  fetch(url)
+    .then((response) => response.arrayBuffer())
+    .then(async (arrayBuffer) => {
+      return {
+        name: url.substring(url.lastIndexOf("/") + 1),
+        // order matters here:
+        // must generate hash THEN decode audio data
+        // decoding audio data mutates the arrayBuffer ??
+        hash: await hashOfArrayBuffer(arrayBuffer),
+        buffer: await audioContext.decodeAudioData(arrayBuffer),
+      };
+    })
+    .then((clip) => addClips([clip]))
+);

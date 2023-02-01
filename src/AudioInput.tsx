@@ -42,20 +42,32 @@ export const AudioInput = (props: Props) => {
   );
 };
 
-const clipOfFile = async (file: File): Promise<Clip> => ({
-  name: file.name,
-  buffer: await audioBufferOfFile(file),
-});
+const clipOfFile = async (file: File): Promise<Clip> => {
+  const arrayBuffer = await arrayBufferOfFile(file);
+  const hash = await hashOfArrayBuffer(arrayBuffer);
 
-const audioBufferOfFile = (file: File) =>
-  new Promise<AudioBuffer>((resolve, reject) => {
+  return {
+    name: file.name,
+    buffer: await audioContext.decodeAudioData(arrayBuffer),
+    hash,
+  };
+};
+
+export const hashOfArrayBuffer = async (buffer: ArrayBuffer) => {
+  const hashBuffer = await window.crypto.subtle.digest("SHA-256", buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+};
+
+const arrayBufferOfFile = (file: File) =>
+  new Promise<ArrayBuffer>((resolve, reject) => {
     const reader = new FileReader();
     reader.onloadend = (e) => {
       if (!(e.target?.result instanceof ArrayBuffer)) {
         reject();
         return;
       }
-      audioContext.decodeAudioData(e.target.result, resolve);
+      resolve(e.target.result);
     };
     reader.readAsArrayBuffer(file);
   });
