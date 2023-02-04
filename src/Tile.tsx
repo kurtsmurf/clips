@@ -1,6 +1,6 @@
 import { audioContext, out } from "./audioContext";
 import { Clip } from "./clip";
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
@@ -15,7 +15,7 @@ import { FFT_SIZE } from "./FFT_SIZE";
 // TODO: make better :))))
 const TOUCH_ENABLED = "ontouchstart" in window;
 
-type Props = { clip: Clip };
+type Props = { clip: Clip, onDelete: () => void };
 
 export const Tile = (props: Props) => {
   const analyser = audioContext.createAnalyser();
@@ -80,6 +80,8 @@ export const Tile = (props: Props) => {
     setD("");
   };
 
+  onCleanup(stop)
+
   return (
     <article>
       {/*
@@ -91,6 +93,7 @@ export const Tile = (props: Props) => {
         which would disable the mouse
         not great
       */}
+      <button onClick={props.onDelete}>delete me</button>
       <figure
         class={player() ? "active" : undefined}
         onTouchStart={play}

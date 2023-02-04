@@ -14,12 +14,16 @@ export const App = () => (
 const Tiles = () => (
   <div class="tiles">
     <For each={clips()}>
-      {(clip) => <Tile clip={clip} />}
+      {(clip) => <Tile clip={clip} onDelete={() => deleteClip(clip.hash)}/>}
     </For>
   </div>
 );
 
 const [clips, setClips] = createSignal<Clip[]>([]);
+
+const deleteClip = (hash: string) => {
+  setClips(prev => prev.filter(clip => clip.hash !== hash))
+}
 
 const addClips = (newClips: Clip[]) => setClips(deduplicate(newClips));
 
