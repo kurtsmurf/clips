@@ -4,19 +4,14 @@ import { createEffect, createSignal, onCleanup } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
 
-// bad news alert
-// why not use pointer events?
-// ran into trouble with mouseenter
-// touch device was firing
-//   pointerDown & mouseenter
-//   which results in start() x2
-//   second "start" kills the first
-//   and tile stays off
-// TODO: make better :))))
+// use pointer events?
+// doing feature detection because ran into trouble trying pointer
+// double clicking caused zoom on ios in a distracting way
+// using touch events didn't have that problem
 const TOUCH_ENABLED = "ontouchstart" in window;
 
 type Props = { clip: Clip, onDelete: () => void };
-
+ 
 export const Tile = (props: Props) => {
   const analyser = audioContext.createAnalyser();
   const samples = new Float32Array(FFT_SIZE);
@@ -48,7 +43,7 @@ export const Tile = (props: Props) => {
     p?.gain.linearRampToValueAtTime(gain(), audioContext.currentTime + 0.1);
   });
 
-  // the path definition
+  // the squiggly line path definition
   const [d, setD] = createSignal("");
 
   const tick = () => {
@@ -93,7 +88,16 @@ export const Tile = (props: Props) => {
         which would disable the mouse
         not great
       */}
-      <button onClick={props.onDelete}>delete me</button>
+      <button class="delete" onClick={props.onDelete}>
+      <svg viewBox="0 0 2 2" width="20" style="transform: rotate(45deg);">
+        <path
+          d="M 1 0 v 2 M 0 1 h 2"
+          stroke="black"
+          fill="none"
+          stroke-width="0.25"
+        />
+      </svg>
+      </button>
       <figure
         class={player() ? "active" : undefined}
         onTouchStart={play}
