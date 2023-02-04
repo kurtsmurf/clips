@@ -24,10 +24,7 @@ const [clips, setClips] = createSignal<Clip[]>([]);
 const addClips = (newClips: Clip[]) => setClips(deduplicate(newClips));
 
 const isNew = (clip: Clip) =>
-  !clips().find((oldClip) =>
-    oldClip.name === clip.name &&
-    oldClip.buffer.length === clip.buffer.length
-  );
+  !clips().find((oldClip) => oldClip.hash === clip.hash);
 
 const deduplicate = (newClips: Clip[]) => {
   return [...clips(), ...newClips.filter(isNew)];
@@ -48,7 +45,8 @@ const deduplicate = (newClips: Clip[]) => {
         name: url.substring(url.lastIndexOf("/") + 1),
         // order matters here:
         // must generate hash THEN decode audio data
-        // decoding audio data mutates the arrayBuffer ??
+        // decoding audio data mutates the arrayBuffer
+        // see "transferable objects" in javascript
         hash: await hashOfArrayBuffer(arrayBuffer),
         buffer: await audioContext.decodeAudioData(arrayBuffer),
       };
