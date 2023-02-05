@@ -10,8 +10,8 @@ import { FFT_SIZE } from "./FFT_SIZE";
 // using touch events didn't have that problem
 const TOUCH_ENABLED = "ontouchstart" in window;
 
-type Props = { clip: Clip, onDelete: () => void };
- 
+type Props = { clip: Clip; onDelete: () => void };
+
 export const Tile = (props: Props) => {
   const analyser = audioContext.createAnalyser();
   const samples = new Float32Array(FFT_SIZE);
@@ -75,11 +75,12 @@ export const Tile = (props: Props) => {
     setD("");
   };
 
-  onCleanup(stop)
+  onCleanup(stop);
 
   return (
     <article>
-      {/*
+      {
+        /*
         bad news alert pt. 2
         see below we use TOUCH_ENABLED to dictate which event
         handlers to attach.
@@ -87,16 +88,17 @@ export const Tile = (props: Props) => {
         in that case ["ontouchstart" in window] would prob be true
         which would disable the mouse
         not great
-      */}
+      */
+      }
       <button class="delete" onClick={props.onDelete}>
-      <svg viewBox="0 0 2 2" width="20" style="transform: rotate(45deg);">
-        <path
-          d="M 1 0 v 2 M 0 1 h 2"
-          stroke="black"
-          fill="none"
-          stroke-width="0.25"
-        />
-      </svg>
+        <svg viewBox="0 0 2 2" width="20" style="transform: rotate(45deg);">
+          <path
+            d="M 1 0 v 2 M 0 1 h 2"
+            stroke="black"
+            fill="none"
+            stroke-width="0.25"
+          />
+        </svg>
       </button>
       <figure
         class={player() ? "active" : undefined}
@@ -107,7 +109,7 @@ export const Tile = (props: Props) => {
         onMouseUp={!TOUCH_ENABLED ? () => !hold() && stop() : undefined}
         onMouseLeave={!TOUCH_ENABLED ? () => !hold() && stop() : undefined}
         onKeyDown={(e) => {
-          if (e.key !== " ") return
+          if (e.key !== " ") return;
           if (hold()) {
             if (player()) {
               stop();
@@ -116,7 +118,7 @@ export const Tile = (props: Props) => {
             }
           } else {
             if (!player()) {
-              play()
+              play();
             }
           }
           e.preventDefault();
@@ -142,31 +144,31 @@ export const Tile = (props: Props) => {
           <label>
             <span>Speed</span>
           </label>
-            <input
-              type="range"
-              name="speed"
-              min="0.5"
-              max="2"
-              step="0.001"
-              value="1"
-              onInput={(e) => setSpeed(parseFloat(e.currentTarget.value))}
-            />
+          <input
+            type="range"
+            name="speed"
+            min="0.5"
+            max="2"
+            step="0.001"
+            value="1"
+            onInput={(e) => setSpeed(parseFloat(e.currentTarget.value))}
+          />
         </div>
         <div class="range-input">
           <label>
             <span>Volume</span>
           </label>
-            <input
-              type="range"
-              name="gain"
-              min="0"
-              max="1"
-              step="0.01"
-              value="1"
-              onInput={(e) => {
-                setGain(parseFloat(e.currentTarget.value));
-              }}
-            />
+          <input
+            type="range"
+            name="gain"
+            min="0"
+            max="1"
+            step="0.01"
+            value="1"
+            onInput={(e) => {
+              setGain(parseFloat(e.currentTarget.value));
+            }}
+          />
         </div>
         <div class="checkboxes">
           <label>
@@ -242,4 +244,3 @@ class Player {
     return this.gainNode.gain;
   }
 }
- 
