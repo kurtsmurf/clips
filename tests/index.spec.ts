@@ -5,7 +5,7 @@ test("test", async ({ page }, testInfo) => {
     await fileChooser.setFiles("sine.wav");
   });
 
-  await page.goto("localhost:3000/clips/");
+  await page.goto("/");
   await page.getByText("add clips").click();
   await page.locator("article:has-text('sine.wav')").getByLabel("Loop").check();
   await page.locator("article:has-text('sine.wav')").getByLabel("Hold").check();
