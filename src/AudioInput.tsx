@@ -18,14 +18,6 @@ export const AudioInput = (props: Props) => {
       }}
       class="audio-input"
     >
-      <svg viewBox="0 0 2 2" width="20">
-        <path
-          d="M 1 0 v 2 M 0 1 h 2"
-          stroke="black"
-          fill="none"
-          stroke-width="0.25"
-        />
-      </svg>
       <span>add clips</span>
       <input
         ref={input}

@@ -1,8 +1,9 @@
 import { audioContext, out } from "./audioContext";
 import { Clip } from "./clip";
-import { createEffect, createSignal, onCleanup } from "solid-js";
+import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
+import { mode } from "./App";
 
 // use pointer events?
 // doing feature detection because ran into trouble trying pointer
@@ -90,16 +91,20 @@ export const Tile = (props: Props) => {
         not great
       */
       }
-      <button class="delete" onClick={props.onDelete}>
-        <svg viewBox="0 0 2 2" width="20" style="transform: rotate(45deg);">
-          <path
-            d="M 1 0 v 2 M 0 1 h 2"
-            stroke="black"
-            fill="none"
-            stroke-width="0.25"
-          />
-        </svg>
-      </button>
+      <Show
+        when={mode() === "DELETING"}
+      >
+        <button class="delete" onClick={props.onDelete}>
+          <svg viewBox="0 0 2 2" width="20" style="transform: rotate(45deg);">
+            <path
+              d="M 1 0 v 2 M 0 1 h 2"
+              stroke="black"
+              fill="none"
+              stroke-width="0.25"
+            />
+          </svg>
+        </button>
+      </Show>
       <figure
         class={player() ? "active" : undefined}
         onTouchStart={play}

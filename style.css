@@ -76,13 +76,22 @@ article {
   /** magic number alert! */
   max-width: 30rem;
 }
-.audio-input {
-  padding-block: 0.5rem;
+header {
+  display: flex;
+  justify-content: space-between;
+}
+header > * {
+  padding: 0.5rem 0;
   gap: 0.5rem;
   display: flex;
-  justify-content: flex-start;
-  margin-right: auto;
   cursor: pointer;
+  font-size: inherit;
+  border: none;
+  background: inherit;
+}
+button {
+  font-family: inherit;
+  color: inherit;
 }
 .audio-input > * {
   border: none;
@@ -156,6 +165,6 @@ label:has(input[type="checkbox"]) {
   border-color: #aaa;
 }
 article {
-  position: relative
+  position: relative;
 }
 
