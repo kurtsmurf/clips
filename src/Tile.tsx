@@ -1,9 +1,8 @@
 import { audioContext, out } from "./audioContext";
-import { Clip } from "./clip";
+import { Clip, mode } from "./signals";
 import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
-import { mode } from "./App";
 
 // use pointer events?
 // doing feature detection because ran into trouble trying pointer
