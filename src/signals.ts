@@ -12,7 +12,7 @@ const [clips, setClips] = createSignal<Clip[]>([]);
 
 const deleteClip = (hash: string) => {
   setClips((prev) => prev.filter((clip) => clip.hash !== hash));
-  if (clips().length === 0) setMode("REGULAR");
+  if (clips().length === 0) setDeleting(false);
 };
 
 const addClips = (newClips: Clip[]) => setClips(deduplicate(newClips));
@@ -26,6 +26,6 @@ const isNew = (clip: Clip) =>
 
 export { addClips, clips, deleteClip };
 
-// -------- MODE --------
+// -------- DELETING --------
 
-export const [mode, setMode] = createSignal<"DELETING" | "REGULAR">("REGULAR");
+export const [deleting, setDeleting] = createSignal<Boolean>(false);

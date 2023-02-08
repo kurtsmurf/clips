@@ -59,6 +59,9 @@ figcaption p {
   flex-direction: column;
   gap: 1rem;
 }
+[inert] {
+  opacity: 0.25;
+}
 label {
   display: flex;
   gap: 0.5rem;

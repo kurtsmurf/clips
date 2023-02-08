@@ -1,5 +1,5 @@
 import { audioContext, out } from "./audioContext";
-import { Clip, mode } from "./signals";
+import { Clip, deleting } from "./signals";
 import { createEffect, createSignal, onCleanup, Show } from "solid-js";
 import { pathOfFloat32Array } from "./path";
 import { FFT_SIZE } from "./FFT_SIZE";
@@ -79,31 +79,6 @@ export const Tile = (props: Props) => {
 
   return (
     <article>
-      {
-        /*
-        bad news alert pt. 2
-        see below we use TOUCH_ENABLED to dictate which event
-        handlers to attach.
-        what happens on a hybrid device like a tablet with a mouse?
-        in that case ["ontouchstart" in window] would prob be true
-        which would disable the mouse
-        not great
-      */
-      }
-      <Show
-        when={mode() === "DELETING"}
-      >
-        <button class="delete" onClick={props.onDelete}>
-          <svg viewBox="0 0 2 2" width="20" style="transform: rotate(45deg);">
-            <path
-              d="M 1 0 v 2 M 0 1 h 2"
-              stroke="black"
-              fill="none"
-              stroke-width="0.25"
-            />
-          </svg>
-        </button>
-      </Show>
       <figure
         class={player() ? "active" : undefined}
         onTouchStart={play}
@@ -143,7 +118,11 @@ export const Tile = (props: Props) => {
           <p>{props.clip.buffer.numberOfChannels} channel</p>
         </figcaption>
       </figure>
-      <div class="controls">
+      <div
+        class="controls"
+        // @ts-ignore
+        inert={deleting() || undefined}
+      >
         <div class="range-input">
           <label>
             <span>Speed</span>
@@ -194,6 +173,18 @@ export const Tile = (props: Props) => {
           </label>
         </div>
       </div>
+      <Show when={deleting()}>
+        <button class="delete" onClick={props.onDelete}>
+          <svg viewBox="0 0 2 2" width="20" style="transform: rotate(45deg);">
+            <path
+              d="M 1 0 v 2 M 0 1 h 2"
+              stroke="black"
+              fill="none"
+              stroke-width="0.25"
+            />
+          </svg>
+        </button>
+      </Show>
     </article>
   );
 };

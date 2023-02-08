@@ -1,6 +1,6 @@
 import { For, Match, Show, Switch } from "solid-js";
 import { AudioInput } from "./AudioInput";
-import { addClips, clips, deleteClip, mode, setMode } from "./signals";
+import { addClips, clips, deleteClip, deleting, setDeleting } from "./signals";
 import { Tile } from "./Tile";
 
 export const App = () => (
@@ -12,21 +12,25 @@ export const App = () => (
 
 const Header = () => (
   <header>
-    <Switch>
-      <Match when={mode() === "REGULAR"}>
-        <AudioInput onChange={addClips} />
-        <Show when={clips().length > 0}>
-          <button onClick={() => setMode("DELETING")}>
-            delete clips
-          </button>
-        </Show>
-      </Match>
-      <Match when={mode() === "DELETING"}>
-        <button onClick={() => setMode("REGULAR")}>
-          done
-        </button>
-      </Match>
-    </Switch>
+    <Show when={!deleting()}>
+    </Show>
+    <Show
+      when={deleting()}
+      fallback={
+        <>
+          <AudioInput onChange={addClips} />
+          <Show when={clips().length > 0}>
+            <button onClick={() => setDeleting(true)}>
+              delete clips
+            </button>
+          </Show>
+        </>
+      }
+    >
+      <button onClick={() => setDeleting(false)}>
+        done
+      </button>
+    </Show>
   </header>
 );
 
