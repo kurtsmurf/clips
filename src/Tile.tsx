@@ -33,14 +33,8 @@ export const Tile = (props: Props) => {
   createEffect(() => {
     player()?.playbackRate.setValueAtTime(speed(), audioContext.currentTime);
   });
-  createEffect(() => {
-    // when synchronizing gain, use linear ramp instead
-    // of setting value instantly to prevent unpleasant
-    // popping noises
-    const p = player();
-    p?.gain.cancelScheduledValues(audioContext.currentTime);
-    p?.gain.setValueAtTime(p.gain.value, audioContext.currentTime);
-    p?.gain.linearRampToValueAtTime(gain(), audioContext.currentTime + 0.1);
+  createEffect(() => {    
+    player()?.smoothSetGain(gain())
   });
 
   // the squiggly line path definition
@@ -65,6 +59,7 @@ export const Tile = (props: Props) => {
     newPlayer.start();
 
     setPlayer(newPlayer);
+
     animationFrame = requestAnimationFrame(tick);
   };
 
@@ -237,5 +232,13 @@ class Player {
 
   get gain() {
     return this.gainNode.gain;
+  }
+
+  smoothSetGain(value: number) {
+    const currentValue = this.gainNode.gain.value
+    // this.gainNode.gain.cancelScheduledValues(audioContext.currentTime);
+    // set starting value for linear ramp
+    this.gainNode.gain.setValueAtTime(currentValue, audioContext.currentTime);
+    this.gainNode.gain.linearRampToValueAtTime(value, audioContext.currentTime + this.release);
   }
 }
