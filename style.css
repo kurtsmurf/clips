@@ -80,8 +80,9 @@ article {
   max-width: 30rem;
 }
 header {
-  padding-top: 1rem;
+  pointer-events: none;
   margin-top: -1rem;
+  padding-top: 1rem;
   display: flex;
   gap: 1rem;
   position: sticky;
@@ -89,7 +90,15 @@ header {
   z-index: 1;
   background: linear-gradient(180deg, white, transparent);
 }
-header > * {
+.hitbox {
+  pointer-events: all;
+  padding-top: 1rem;
+  margin-top: -1rem;
+  display: flex;
+  gap: 1rem;
+}
+header button,
+header [role="button"] {
   padding: 0.5rem 1ch;
   gap: 0.5rem;
   display: flex;
@@ -169,6 +178,7 @@ label:has(input[type="checkbox"]) {
   right: -1rem;
   top: -1rem;
   padding: 0.5rem;
+  z-index: 10;
 }
 .delete:active {
   background: #ddd;

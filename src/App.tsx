@@ -12,25 +12,27 @@ export const App = () => (
 
 const Header = () => (
   <header>
-    <Show when={!deleting()}>
-    </Show>
-    <Show
-      when={deleting()}
-      fallback={
-        <>
-          <AudioInput onChange={addClips} />
-          <Show when={clips().length > 0}>
-            <button onClick={() => setDeleting(true)}>
-              delete clips
-            </button>
-          </Show>
-        </>
-      }
-    >
-      <button onClick={() => setDeleting(false)}>
-        done
-      </button>
-    </Show>
+    <div class="hitbox">
+      <Show when={!deleting()}>
+      </Show>
+      <Show
+        when={deleting()}
+        fallback={
+          <>
+            <AudioInput onChange={addClips} />
+            <Show when={clips().length > 0}>
+              <button onClick={() => setDeleting(true)}>
+                delete clips
+              </button>
+            </Show>
+          </>
+        }
+      >
+        <button onClick={() => setDeleting(false)}>
+          done
+        </button>
+      </Show>
+    </div>
   </header>
 );
 
