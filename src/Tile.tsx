@@ -125,11 +125,11 @@ export const Tile = (props: Props) => {
           <input
             type="range"
             name="speed"
-            min="0.5"
-            max="2"
-            step="0.001"
-            value="1"
-            onInput={(e) => setSpeed(parseFloat(e.currentTarget.value))}
+            min="-12"
+            max="12"
+            step="0.125"
+            value="0"
+            onInput={(e) => setSpeed(Math.pow(2, parseFloat(e.currentTarget.value)/12))}
           />
         </div>
         <div class="range-input">
@@ -236,7 +236,6 @@ class Player {
 
   smoothSetGain(value: number) {
     const currentValue = this.gainNode.gain.value
-    // this.gainNode.gain.cancelScheduledValues(audioContext.currentTime);
     // set starting value for linear ramp
     this.gainNode.gain.setValueAtTime(currentValue, audioContext.currentTime);
     this.gainNode.gain.linearRampToValueAtTime(value, audioContext.currentTime + this.release);
