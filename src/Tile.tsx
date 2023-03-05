@@ -121,6 +121,8 @@ export const Tile = (props: Props) => {
         <div class="range-input">
           <label>
             <span>Speed</span>
+            <span>{speed().toFixed(2)}x</span>
+
           </label>
           <input
             type="range"
@@ -135,6 +137,7 @@ export const Tile = (props: Props) => {
         <div class="range-input">
           <label>
             <span>Volume</span>
+            <span>{gain().toFixed(2)}x</span>
           </label>
           <input
             type="range"
